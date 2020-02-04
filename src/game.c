@@ -1,7 +1,21 @@
 #include <SDL.h>
+#include "simple_logger.h"
 #include "gf2d_graphics.h"
 #include "gf2d_sprite.h"
-#include "simple_logger.h"
+#include "entity.h"
+
+Entity *newTestEntity()
+{
+	Entity *self;
+	self = entity_new();
+	if (!self) return NULL;
+	self->sprite = gf2d_sprite_load_all(
+		"imagegs/space_bug.png",
+		128,
+		128,
+		16);
+	return self;
+}
 
 int main(int argc, char * argv[])
 {
@@ -29,11 +43,16 @@ int main(int argc, char * argv[])
     gf2d_graphics_set_frame_delay(16);
     gf2d_sprite_init(1024);
     SDL_ShowCursor(SDL_DISABLE);
+
+	entity_manager_init(1024);
     
     /*demo setup*/
     sprite = gf2d_sprite_load_image("images/backgrounds/bg_flat.png");
     mouse = gf2d_sprite_load_all("images/pointer.png",32,32,16);
     /*main game loop*/
+
+	newTestEntity();
+
     while(!done)
     {
         SDL_PumpEvents();   // update SDL's internal event structures
@@ -49,6 +68,8 @@ int main(int argc, char * argv[])
             //backgrounds drawn first
             gf2d_sprite_draw_image(sprite,vector2d(0,0));
             
+			entity_draw_all();
+
             //UI elements last
             gf2d_sprite_draw(
                 mouse,
