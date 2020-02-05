@@ -10,6 +10,7 @@ typedef struct
 
 static EntityManager entity_manager = { 0 };
 
+// Close the entity manager
 void entity_manager_close()
 {
 	int i;
@@ -23,8 +24,10 @@ void entity_manager_close()
 	entity_manager.maxEnts = 0;
 	free(entity_manager.entityList);
 	entity_manager.entityList = NULL;
+	slog("entity manager closed");
 }
 
+// Initialize the entity manager
 void entity_manager_init(Uint32 maxEnts)
 {
 	if (entity_manager.entityList != NULL)
@@ -33,10 +36,10 @@ void entity_manager_init(Uint32 maxEnts)
 	}
 	if (!maxEnts)
 	{
-		slog("canot initialize a zero size entity list!");
+		slog("cannot intialize a zero size entity list!");
 		return;
 	}
-	entity_manager.entityList = (Entity *)malloc(sizeof(Entity));
+	entity_manager.entityList = (Entity *)malloc(sizeof(Entity)* maxEnts);
 	if (entity_manager.entityList == NULL)
 	{
 		slog("failed to allocate %i entities for the entity manager", maxEnts);
@@ -48,6 +51,7 @@ void entity_manager_init(Uint32 maxEnts)
 	atexit(entity_manager_close);
 }
 
+// Create a new entity
 Entity *entity_new()
 {
 	int i;
@@ -61,6 +65,7 @@ Entity *entity_new()
 	return NULL;
 }
 
+// Release the entity! From memory.
 void entity_free(Entity *self)
 {
 	if (!self) return;
@@ -68,28 +73,31 @@ void entity_free(Entity *self)
 	memset(self, 0, sizeof(Entity));
 }
 
+// Update the entity
 void entity_update(Entity *self)
 {
 	if (!self) return;
 	self->frame = self->frame + 0.1;
-	self->frame;
+	if (self->frame > 10)self->frame = 0;
 }
 
+// Update all available entities
 void entity_update_all()
 {
 	int i;
 	for (i = 0; i < entity_manager.maxEnts; i++)
 	{
-		if (!entity_manager.entityList[i]._inuse) continue;
-		entity_draw(&entity_manager.entityList[i]);
+		if (!entity_manager.entityList[i]._inuse)continue;
+		entity_update(&entity_manager.entityList[i]);
 	}
 }
 
+// Draw the entity
 void entity_draw(Entity *self)
 {
 	if (self == NULL)
 	{
-		slog("cannot draw sprite, NULL entity provided");
+		slog("cannot draw sprite, NULL entity provided!");
 		return;
 	}
 	gf2d_sprite_draw(
@@ -101,15 +109,17 @@ void entity_draw(Entity *self)
 		NULL,
 		NULL,
 		(Uint32)self->frame);
-	
 }
 
+// Draw all available entities
 void entity_draw_all()
 {
 	int i;
 	for (i = 0; i < entity_manager.maxEnts; i++)
 	{
-		if (!entity_manager.entityList[i]._inuse) continue;
+		if (!entity_manager.entityList[i]._inuse)continue;
 		entity_draw(&entity_manager.entityList[i]);
 	}
 }
+
+/*eol@eof*/
