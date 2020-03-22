@@ -1,16 +1,21 @@
 #include <stdlib.h>
 #include "simple_logger.h"
+#include "gf2d_draw.h"
 #include "entity.h"
+#include "level.h"
+#include "collisions.h"
 
 typedef struct
 {
-	Uint32 maxEnts; /**<max entities supported by the system*/
-	Entity *entityList; /**<pointer to an allocated array of entitites*/
+	Uint32 maxEnts;     /**<max entities supported by the system*/
+	Entity *entityList; /**<pointer to an allocated array of entities*/
 }EntityManager;
 
 static EntityManager entity_manager = { 0 };
 
-// Close the entity manager
+
+void entity_collide_check(Entity *entity);
+
 void entity_manager_close()
 {
 	int i;
@@ -27,7 +32,6 @@ void entity_manager_close()
 	slog("entity manager closed");
 }
 
-// Initialize the entity manager
 void entity_manager_init(Uint32 maxEnts)
 {
 	if (entity_manager.entityList != NULL)
@@ -51,13 +55,13 @@ void entity_manager_init(Uint32 maxEnts)
 	atexit(entity_manager_close);
 }
 
-// Create a new entity
+
 Entity *entity_new()
 {
 	int i;
 	for (i = 0; i < entity_manager.maxEnts; i++)
 	{
-		if (entity_manager.entityList[i]._inuse) continue;
+		if (entity_manager.entityList[i]._inuse)continue;
 		entity_manager.entityList[i]._inuse = 1;
 		return &entity_manager.entityList[i];
 	}
@@ -65,36 +69,64 @@ Entity *entity_new()
 	return NULL;
 }
 
-// Release the entity! From memory.
+
 void entity_free(Entity *self)
 {
-	if (!self) return;
+	if (!self)return;
 	gf2d_sprite_free(self->sprite);
 	memset(self, 0, sizeof(Entity));
 }
 
-// Update the entity
 void entity_update(Entity *self)
 {
-	if (!self) return;
-	self->frame = self->frame + 0.1;
-	if (self->frame > 10)self->frame = 0;
+	Vector2D normal = { 0, 0 };
+	if (!self)return;
+
+	// Check level bounds
+	vector2d_add(self->position, self->position, self->velocity);
+	if (level_bounds_test_circle(level_get_active(), self->position, self->radius, &normal))
+	{
+		if (normal.x > 0)
+		{
+			self->velocity.x = fabs(self->velocity.x);
+			self->position.x = self->position.x + 2;
+		}
+		if (normal.x < 0)
+		{
+			self->velocity.x = -fabs(self->velocity.x);
+			self->position.x = self->position.x - 2;
+		}
+		if (normal.y > 0)
+		{
+			self->velocity.y = fabs(self->velocity.y);
+			self->position.y = self->position.y + 2;
+		}
+		if (normal.y < 0)
+		{
+			self->velocity.y = -fabs(self->velocity.y);
+			self->position.y = self->position.y - 2;
+		}
+	}
+	entity_collide_check(self);
 }
 
-// Update all available entities
 void entity_update_all()
 {
 	int i;
 	for (i = 0; i < entity_manager.maxEnts; i++)
 	{
 		if (!entity_manager.entityList[i]._inuse)continue;
+		if (entity_manager.entityList[i].think)
+		{
+			entity_manager.entityList[i].think(&entity_manager.entityList[i]);
+		}
 		entity_update(&entity_manager.entityList[i]);
 	}
 }
 
-// Draw the entity
 void entity_draw(Entity *self)
 {
+	SDL_Rect rect;
 	if (self == NULL)
 	{
 		slog("cannot draw sprite, NULL entity provided!");
@@ -102,16 +134,41 @@ void entity_draw(Entity *self)
 	}
 	gf2d_sprite_draw(
 		self->sprite,
-		self->position,
+		vector2d(self->position.x + self->drawOffset.x, self->position.y + self->drawOffset.y),
 		NULL,
 		NULL,
 		NULL,
 		NULL,
 		NULL,
 		(Uint32)self->frame);
+	gf2d_draw_circle(self->position, self->radius, vector4d(255, 0, 255, 255));
+	//gfc_rect_set(rect,self->position.x,self->position.y,self->size.x,self->size.y);
+	//gf2d_draw_rect(rect, vector4d(255, 0, 255, 255));
 }
 
-// Draw all available entities
+void entity_entity_collide(Entity *e1, Entity *e2)
+{
+	if (collide_circle(e1->position, e1->radius, e2->position, e2->radius))
+	{
+		if (e1->touch)
+		{
+			e1->touch(e1, e2);
+		}
+	}
+}
+
+void entity_collide_check(Entity *entity)
+{
+	int i;
+	if (!entity)return;
+	for (i = 0; i < entity_manager.maxEnts; i++)
+	{
+		if (!entity_manager.entityList[i]._inuse)continue;
+		if (&entity_manager.entityList[i] == entity)continue;
+		entity_entity_collide(entity, &entity_manager.entityList[i]);
+	}
+}
+
 void entity_draw_all()
 {
 	int i;
@@ -121,5 +178,7 @@ void entity_draw_all()
 		entity_draw(&entity_manager.entityList[i]);
 	}
 }
+
+
 
 /*eol@eof*/

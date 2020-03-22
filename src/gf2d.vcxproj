@@ -21,17 +21,26 @@
     <ClCompile Include="..\gfc\simple_logger\src\simple_logger.c" />
     <ClCompile Include="..\gfc\src\gfc_audio.c" />
     <ClCompile Include="..\gfc\src\gfc_callbacks.c" />
+    <ClCompile Include="..\gfc\src\gfc_color.c" />
     <ClCompile Include="..\gfc\src\gfc_input.c" />
     <ClCompile Include="..\gfc\src\gfc_list.c" />
     <ClCompile Include="..\gfc\src\gfc_matrix.c" />
     <ClCompile Include="..\gfc\src\gfc_text.c" />
     <ClCompile Include="..\gfc\src\gfc_types.c" />
     <ClCompile Include="..\gfc\src\gfc_vector.c" />
+    <ClCompile Include="arrow.c" />
+    <ClCompile Include="bug.c" />
+    <ClCompile Include="collisions.c" />
     <ClCompile Include="entity.c" />
     <ClCompile Include="game.c" />
     <ClCompile Include="gf2d_draw.c" />
+    <ClCompile Include="gf2d_font.c" />
     <ClCompile Include="gf2d_graphics.c" />
     <ClCompile Include="gf2d_sprite.c" />
+    <ClCompile Include="level.c" />
+    <ClCompile Include="player.c" />
+    <ClCompile Include="shield.c" />
+    <ClCompile Include="sword.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\gfc\include\gfc_audio.h" />
@@ -56,7 +65,18 @@
     <ClInclude Include="..\include\gf2d_draw.h" />
     <ClInclude Include="..\include\gf2d_graphics.h" />
     <ClInclude Include="..\include\gf2d_sprite.h" />
+    <ClInclude Include="arrow.h" />
+    <ClInclude Include="bug.h" />
+    <ClInclude Include="collisions.h" />
     <ClInclude Include="entity.h" />
+    <ClInclude Include="gf2d_font.h" />
+    <ClInclude Include="level.h" />
+    <ClInclude Include="player.h" />
+    <ClInclude Include="shield.h" />
+    <ClInclude Include="sword.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{ED7C6F79-ABCE-4674-9FC4-3CB693C16AE4}</ProjectGuid>
