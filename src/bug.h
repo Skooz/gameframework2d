@@ -3,7 +3,7 @@
 
 #include "entity.h"
 
-Entity *bug_new(Vector2D position, Vector2D velocity);
+Entity *bug_new(Vector2D position);
 
 
 #endif

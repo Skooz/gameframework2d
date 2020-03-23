@@ -88,22 +88,26 @@ void entity_update(Entity *self)
 	{
 		if (normal.x > 0)
 		{
-			self->velocity.x = fabs(self->velocity.x);
+			//self->velocity.x = fabs(self->velocity.x);
+			self->velocity.x = 0;
 			self->position.x = self->position.x + 2;
 		}
 		if (normal.x < 0)
 		{
-			self->velocity.x = -fabs(self->velocity.x);
+			//self->velocity.x = -fabs(self->velocity.x);
+			self->velocity.x = 0;
 			self->position.x = self->position.x - 2;
 		}
 		if (normal.y > 0)
 		{
-			self->velocity.y = fabs(self->velocity.y);
+			//self->velocity.y = fabs(self->velocity.y);
+			self->velocity.y = 0;
 			self->position.y = self->position.y + 2;
 		}
 		if (normal.y < 0)
 		{
-			self->velocity.y = -fabs(self->velocity.y);
+			//self->velocity.y = -fabs(self->velocity.y);
+			self->velocity.y = 0;
 			self->position.y = self->position.y - 2;
 		}
 	}

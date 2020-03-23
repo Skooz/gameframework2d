@@ -209,12 +209,11 @@ void player_think(Entity *self)
 	{
 		if (SDL_GetTicks() > nextAttack)
 		{
-	
 			if (self->magic > 10)
 			{
-				self->magic -= 10;
+				//self->magic -= 10;
+				nextAttack = SDL_GetTicks() + 300;
 				Entity *sword;
-
 				sword = sword_new(vector2d(self->position.x, self->position.y - 50));
 				sword_new(vector2d(self->position.x, self->position.y + 50));
 				sword_new(vector2d(self->position.x - 50, self->position.y));

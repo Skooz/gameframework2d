@@ -52,8 +52,8 @@ int main(int argc, char * argv[])
 
 	// Entities
 	entity_manager_init(1024);
-	player = player_new(vector2d(100, 100));
-	bug = bug_new(vector2d(200, 200), vector2d(gfc_crandom(), gfc_crandom()));
+	player = player_new(vector2d(700, 500));
+	bug = bug_new(vector2d(500, 300));
 
 	
     while(!done)

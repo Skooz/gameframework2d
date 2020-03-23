@@ -3,7 +3,7 @@
 
 #include "entity.h"
 
-Entity *arrow_new(Vector2D position, Vector2D velocity);
+Entity *arrow_new(Vector2D position, Vector2D velocity, int dir);
 
 
 #endif
