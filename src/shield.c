@@ -8,6 +8,7 @@
 
 Uint32 lifetime;
 int direction;
+Entity *owner;
 
 void shield_think(Entity *self)
 {
@@ -15,13 +16,18 @@ void shield_think(Entity *self)
 
 	int mx, my;
 
+	if (self->souls > 0)
+	{
+		owner->souls += self->souls;
+		self->souls = 0;
+	}
+
 	if (SDL_GetTicks() > lifetime || self->state == ES_DEAD)
 		entity_free(self);
 
 	if (collide_circle(self->position, self->radius, vector2d(mx, my), 1))
 	{
 		self->state = ES_DEAD;
-		self->frame = 60;
 		vector2d_set(self->velocity, 0, 0);
 		return;
 	}
@@ -30,6 +36,8 @@ void shield_think(Entity *self)
 void shield_touch(Entity *self, Entity *other)
 {
 	if ((!self) || (!other) || self->state == ES_DEAD)return;
+
+	slog("Hit for %i damage", self->damage);
 
 	//self->state = ES_DEAD;
 
@@ -57,7 +65,7 @@ void shield_touch(Entity *self, Entity *other)
 }
 
 
-Entity *shield_new(Vector2D position, int dir)
+Entity *shield_new(Vector2D position, int dir, Entity *own)
 {
 	Entity *self;
 	self = entity_new();
@@ -74,6 +82,12 @@ Entity *shield_new(Vector2D position, int dir)
 	self->touch = shield_touch;
 	vector2d_copy(self->position, position);
 	vector2d_set(self->drawOffset, -30, -30);
+
+	// Who created us
+	owner = own;
+
+	// Damage
+	self->damage = 0 * owner->attack;
 
 	direction = dir;
 	lifetime = SDL_GetTicks() + 100;

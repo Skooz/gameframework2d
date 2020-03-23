@@ -7,7 +7,8 @@
 #include "gf2d_font.h"
 
 #include "entity.h"
-#include "bug.h"
+#include "monster.h"
+#include "player.h"
 #include "level.h"
 
 
@@ -26,7 +27,11 @@ int main(int argc, char * argv[])
 	// Entity Test
 	SDL_Rect bounds = { 0, 0, 1200, 720 };
 	Level *level;
-	Entity *bug;
+	Entity *monster1;
+	Entity *monster2;
+	Entity *monster3;
+	Entity *monster4;
+	//Entity *monster5;
 	Entity *player;
 
     /*program initializtion*/
@@ -52,8 +57,12 @@ int main(int argc, char * argv[])
 
 	// Entities
 	entity_manager_init(1024);
-	player = player_new(vector2d(700, 500));
-	bug = bug_new(vector2d(500, 300));
+	player = player_new(vector2d(600, 600));
+	monster1 = monster_new(vector2d(400, 400), 1);
+	monster2 = monster_new(vector2d(400, 500), 2);
+	monster3 = monster_new(vector2d(600, 500), 3);
+	monster4 = monster_new(vector2d(700, 500), 4);
+	//monster5 = monster_new(vector2d(400, 400), 5);
 
 	
     while(!done)

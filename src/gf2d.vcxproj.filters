@@ -81,9 +81,6 @@
     <ClCompile Include="collisions.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="bug.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="player.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -103,6 +100,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="level.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -176,9 +176,6 @@
     <ClInclude Include="collisions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="bug.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -198,6 +195,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="level.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="monster.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -7,20 +7,26 @@
 #define ES_DEAD 1
 
 int direction;
+Entity *owner;
 
 void arrow_think(Entity *self)
 {
 	if (!self) return;
 
 	int mx, my;
+
+	if (self->souls > 0)
+	{
+		owner->souls += self->souls;
+		self->souls = 0;
+	}
 	
 	if (self->state == ES_DEAD)
 		entity_free(self);
-
+	/**/
 	if (collide_circle(self->position, self->radius, vector2d(mx, my), 1))
 	{
 		self->state = ES_DEAD;
-		self->frame = 60;
 		vector2d_set(self->velocity, 0, 0);
 		return;
 	}
@@ -30,15 +36,15 @@ void arrow_touch(Entity *self, Entity *other)
 {
 	if ((!self) || (!other) || self->state == ES_DEAD)return;
 
-	self->state = ES_DEAD;
+	slog("Hit for %i damage", self->damage);
 
-	// Do damage
+	self->state = ES_DEAD;
 
 	vector2d_set(self->velocity, 0, 0);
 }
 
 
-Entity *arrow_new(Vector2D position, Vector2D velocity, int dir)
+Entity *arrow_new(Vector2D position, Vector2D velocity, int dir, Entity *own)
 {
 	Entity *self;
 	self = entity_new();
@@ -58,7 +64,11 @@ Entity *arrow_new(Vector2D position, Vector2D velocity, int dir)
 	vector2d_copy(self->velocity, velocity);
 	vector2d_set(self->drawOffset, -30, -30);
 
-	self->damage = 1;
+	// Who created us
+	owner = own;
+
+	// Damage
+	self->damage = 2 * owner->attack;
 
 	if (direction == 1)
 	{

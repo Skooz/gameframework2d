@@ -17,6 +17,11 @@ typedef struct Entity_S
 	float       radius;     /**<how wide this entity is*/
 	Vector2D    size;
 
+	Uint32 nextMove;
+	int moveDir;
+	int monsterType;
+
+	//Entity *owner;
 
 	int health;		// The player's health value.
 	int maxHealth;	// The player's max health value.
@@ -25,10 +30,6 @@ typedef struct Entity_S
 	int attack;		// The player's attack damage modifier.
 	int damage;		// The damage dealt by an entity.
 	int souls;		// Souls currency.
-
-
-	int         madebabies;
-	Uint32      age;
 
 	void(*think)(struct Entity_S *self);   /**<called when an entity draws*/
 	void(*touch)(struct Entity_S *self, struct Entity_S *other);   /**<called when an entity touches another entity*/

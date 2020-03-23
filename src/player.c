@@ -11,7 +11,7 @@ void player_think(Entity *self);
 void player_touch(Entity *self, Entity *other);
 
 Uint32 nextAttack; // Used with SDL_GetTicks() to create a delay between attacks.
-
+Uint32 nextMessage;
 
 
 // Create a player
@@ -32,6 +32,7 @@ Entity *player_new(Vector2D position)
 	self->maxMagic	= 100;
 	self->magic		= self->maxMagic;
 	self->attack	= 1;
+	self->souls;
 
 	self->radius = 15;
 	self->size.x = 30;
@@ -54,9 +55,68 @@ void player_think(Entity *self)
 	static int direction; // 1=up, 2=down, 3=left, 4=right
 	const Uint8 * keys;
 
+	keys = SDL_GetKeyboardState(NULL);
+
+	// Print Values
+	if (keys[SDL_SCANCODE_F1] && nextMessage < SDL_GetTicks()) // Level Health
+	{
+		nextMessage = SDL_GetTicks() + 500;
+		if (self->souls >= 100)
+		{
+			self->maxHealth += 10;
+			self->souls -= 100;
+			slog("Health increased +10.\n-100 Souls.");
+		}
+		else
+			slog("Not enough souls.");
+	}
+	if (keys[SDL_SCANCODE_F2] && nextMessage < SDL_GetTicks()) // Level Magic
+	{
+		nextMessage = SDL_GetTicks() + 500;
+		if (self->souls >= 100)
+		{
+			self->maxMagic += 10;
+			self->souls -= 100;
+			slog("Magic increased +10.\n-100 Souls.");
+		}
+		else
+			slog("Not enough souls.");
+	}
+	if (keys[SDL_SCANCODE_F3] && nextMessage < SDL_GetTicks()) // Level Attack
+	{
+		nextMessage = SDL_GetTicks() + 500;
+		if (self->souls >= 100)
+		{
+			self->attack += 1;
+			self->souls -= 100;
+			slog("Attack increased +1.\n-100 Souls.");
+		}
+		else
+			slog("Not enough souls.");
+	}
+	if (keys[SDL_SCANCODE_1] && nextMessage < SDL_GetTicks()) // Print Health
+	{
+		nextMessage = SDL_GetTicks() + 500;
+		slog("Health: %i / %i", self->health, self->maxHealth);
+	}
+	if (keys[SDL_SCANCODE_2] && nextMessage < SDL_GetTicks()) // Print Magic
+	{
+		nextMessage = SDL_GetTicks() + 500;
+		slog("Magic: %i / %i", self->magic, self->maxMagic);
+	}
+	if (keys[SDL_SCANCODE_3] && nextMessage < SDL_GetTicks()) // Print Attack
+	{
+		nextMessage = SDL_GetTicks() + 500;
+		slog("Attack: %i", self->attack);
+	}
+	if (keys[SDL_SCANCODE_4] && nextMessage < SDL_GetTicks()) // Print Souls
+	{
+		nextMessage = SDL_GetTicks() + 500;
+		slog("Souls: %i", self->souls);
+	}
 
 	// ** MOVEMENT **
-	keys = SDL_GetKeyboardState(NULL);
+	
 	if (keys[SDL_SCANCODE_W]) // Up
 	{
 		direction = 1;
@@ -102,7 +162,7 @@ void player_think(Entity *self)
 			if (SDL_GetTicks() > nextAttack)
 			{
 				nextAttack = SDL_GetTicks() + 300;
-				shield = shield_new(vector2d(self->position.x, self->position.y - 50), direction);
+				shield = shield_new(vector2d(self->position.x, self->position.y - 50), direction, self);
 			}
 		}
 		if (direction == 2)
@@ -112,7 +172,7 @@ void player_think(Entity *self)
 			if (SDL_GetTicks() > nextAttack)
 			{
 				nextAttack = SDL_GetTicks() + 300;
-				shield = shield_new(vector2d(self->position.x, self->position.y + 50), direction);
+				shield = shield_new(vector2d(self->position.x, self->position.y + 50), direction, self);
 			}
 		}
 		if (direction == 3)
@@ -122,7 +182,7 @@ void player_think(Entity *self)
 			if (SDL_GetTicks() > nextAttack)
 			{
 				nextAttack = SDL_GetTicks() + 300;
-				shield = shield_new(vector2d(self->position.x - 50, self->position.y), direction);
+				shield = shield_new(vector2d(self->position.x - 50, self->position.y), direction, self);
 			}
 		}
 		if (direction == 4)
@@ -132,13 +192,13 @@ void player_think(Entity *self)
 			if (SDL_GetTicks() > nextAttack)
 			{
 				nextAttack = SDL_GetTicks() + 300;
-				shield = shield_new(vector2d(self->position.x + 50, self->position.y), direction);
+				shield = shield_new(vector2d(self->position.x + 50, self->position.y), direction, self);
 			}
 		}
 	}
 	if (keys[SDL_SCANCODE_E]) // Sword - Need a sword entity
 	{
-		Entity *sword;
+		Entity *sword_swipe;
 		if (direction == 1)
 		{
 			self->frame = 15;
@@ -146,7 +206,7 @@ void player_think(Entity *self)
 			if (SDL_GetTicks() > nextAttack)
 			{
 				nextAttack = SDL_GetTicks() + 300;
-				sword = sword_new(vector2d(self->position.x, self->position.y - 50));
+				sword_swipe = sword_new(vector2d(self->position.x, self->position.y - 50), self);
 			}
 		}
 		if (direction == 2)
@@ -156,7 +216,7 @@ void player_think(Entity *self)
 			if (SDL_GetTicks() > nextAttack)
 			{
 				nextAttack = SDL_GetTicks() + 300;
-				sword = sword_new(vector2d(self->position.x, self->position.y + 50));
+				sword_swipe = sword_new(vector2d(self->position.x, self->position.y + 50), self);
 			}
 		}
 		if (direction == 3)
@@ -166,7 +226,7 @@ void player_think(Entity *self)
 			if (SDL_GetTicks() > nextAttack)
 			{
 				nextAttack = SDL_GetTicks() + 300;
-				sword = sword_new(vector2d(self->position.x - 50, self->position.y));
+				sword_swipe = sword_new(vector2d(self->position.x - 50, self->position.y), self);
 			}
 		}
 		if (direction == 4)
@@ -176,7 +236,7 @@ void player_think(Entity *self)
 			if (SDL_GetTicks() > nextAttack)
 			{
 				nextAttack = SDL_GetTicks() + 300;
-				sword = sword_new(vector2d(self->position.x + 50, self->position.y));
+				sword_swipe = sword_new(vector2d(self->position.x + 50, self->position.y), self);
 			}
 		}
 	}
@@ -188,36 +248,39 @@ void player_think(Entity *self)
 			Entity *arrow;
 			if (direction == 1)
 			{
-				arrow = arrow_new(vector2d(self->position.x, self->position.y-50), vector2d(0, -5), direction);
+				arrow = arrow_new(vector2d(self->position.x, self->position.y-30), vector2d(0, -5), direction, self);
 			}
 			if (direction == 2)
 			{
-				arrow = arrow_new(vector2d(self->position.x, self->position.y+50), vector2d(0, 5), direction);
+				arrow = arrow_new(vector2d(self->position.x, self->position.y+30), vector2d(0, 5), direction, self);
 			}
 			if (direction == 3)
 			{
-				arrow = arrow_new(vector2d(self->position.x-50, self->position.y), vector2d(-5, 0), direction);
+				arrow = arrow_new(vector2d(self->position.x-30, self->position.y), vector2d(-5, 0), direction, self);
 			}
 			if (direction == 4)
 			{
-				arrow = arrow_new(vector2d(self->position.x+50, self->position.y), vector2d(5, 0), direction);
+				arrow = arrow_new(vector2d(self->position.x+30, self->position.y), vector2d(5, 0), direction, self);
 			}
-			slog("Fired an arrow in direction: ", direction);
 		}
 	}
-	if (keys[SDL_SCANCODE_F]) // Sword spin
+	if (keys[SDL_SCANCODE_F]) // Sword spin - Might want a unique entity for this instead.
 	{
 		if (SDL_GetTicks() > nextAttack)
 		{
 			if (self->magic > 10)
 			{
-				//self->magic -= 10;
-				nextAttack = SDL_GetTicks() + 300;
+				self->magic -= 10;
+				nextAttack = SDL_GetTicks() + 1000;
 				Entity *sword;
-				sword = sword_new(vector2d(self->position.x, self->position.y - 50));
-				sword_new(vector2d(self->position.x, self->position.y + 50));
-				sword_new(vector2d(self->position.x - 50, self->position.y));
-				sword_new(vector2d(self->position.x + 50, self->position.y));
+				sword = sword_new(vector2d(self->position.x, self->position.y - 50), self);
+				sword_new(vector2d(self->position.x+30, self->position.y - 30), self);
+				sword_new(vector2d(self->position.x-30, self->position.y - 30), self);
+				sword_new(vector2d(self->position.x, self->position.y + 50), self);
+				sword_new(vector2d(self->position.x - 30, self->position.y + 30), self);
+				sword_new(vector2d(self->position.x + 30, self->position.y + 30), self);
+				sword_new(vector2d(self->position.x - 50, self->position.y), self);
+				sword_new(vector2d(self->position.x + 50, self->position.y), self);
 			}
 		}
 	}
