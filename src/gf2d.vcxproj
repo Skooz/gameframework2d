@@ -29,6 +29,7 @@
     <ClCompile Include="..\gfc\src\gfc_types.c" />
     <ClCompile Include="..\gfc\src\gfc_vector.c" />
     <ClCompile Include="arrow.c" />
+    <ClCompile Include="bonfire.c" />
     <ClCompile Include="monster.c" />
     <ClCompile Include="collisions.c" />
     <ClCompile Include="entity.c" />
@@ -66,6 +67,7 @@
     <ClInclude Include="..\include\gf2d_graphics.h" />
     <ClInclude Include="..\include\gf2d_sprite.h" />
     <ClInclude Include="arrow.h" />
+    <ClInclude Include="bonfire.h" />
     <ClInclude Include="monster.h" />
     <ClInclude Include="collisions.h" />
     <ClInclude Include="entity.h" />

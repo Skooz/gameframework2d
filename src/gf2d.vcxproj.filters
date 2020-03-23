@@ -105,6 +105,9 @@
     <ClCompile Include="monster.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="bonfire.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\gfc\simple_logger\include\simple_logger.h">
@@ -198,6 +201,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="monster.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bonfire.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

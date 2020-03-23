@@ -12,7 +12,7 @@ void player_touch(Entity *self, Entity *other);
 
 Uint32 nextAttack; // Used with SDL_GetTicks() to create a delay between attacks.
 Uint32 nextMessage;
-
+Entity *lastBonfire;
 
 // Create a player
 Entity *player_new(Vector2D position)
@@ -57,7 +57,7 @@ void player_think(Entity *self)
 
 	keys = SDL_GetKeyboardState(NULL);
 
-	// Print Values
+	// ** STATS ** 
 	if (keys[SDL_SCANCODE_F1] && nextMessage < SDL_GetTicks()) // Level Health
 	{
 		nextMessage = SDL_GetTicks() + 500;
@@ -116,7 +116,6 @@ void player_think(Entity *self)
 	}
 
 	// ** MOVEMENT **
-	
 	if (keys[SDL_SCANCODE_W]) // Up
 	{
 		direction = 1;
@@ -196,7 +195,7 @@ void player_think(Entity *self)
 			}
 		}
 	}
-	if (keys[SDL_SCANCODE_E]) // Sword - Need a sword entity
+	if (keys[SDL_SCANCODE_E]) // Sword
 	{
 		Entity *sword_swipe;
 		if (direction == 1)
@@ -240,7 +239,7 @@ void player_think(Entity *self)
 			}
 		}
 	}
-	if (keys[SDL_SCANCODE_R]) // Arrow - Launch a projectile - Needs ammo
+	if (keys[SDL_SCANCODE_R]) // Arrow - Launch a projectile
 	{
 		if (SDL_GetTicks() > nextAttack)
 		{
@@ -296,6 +295,18 @@ void player_think(Entity *self)
 			}
 		}
 	}
+
+	// ** DEATH **
+	if (self->health <= 0)
+	{
+		// new bloodstain(self->position, self->souls)
+		// self->position = lastBonfire->position;
+
+		// Reset Stats
+		self->health = self->maxHealth;
+		self->magic = self->maxMagic;
+		self->souls = 0;
+	}
 }
 
 
@@ -303,4 +314,12 @@ void player_touch(Entity *self, Entity *other)
 {
 	if (!self || !other) return;
 
+	const Uint8 * keys;
+
+	keys = SDL_GetKeyboardState(NULL);
+
+	if (keys[SDL_SCANCODE_X])
+	{
+		// Interact?
+	}
 }
