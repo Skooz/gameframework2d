@@ -22,7 +22,7 @@ typedef struct Entity_S
 	int monsterType;
 
 	//Entity *owner;
-
+	int isPlayer;	// Identify whether or not the entity is a player.
 	int health;		// The player's health value.
 	int maxHealth;	// The player's max health value.
 	int magic;		// The player's magic value.

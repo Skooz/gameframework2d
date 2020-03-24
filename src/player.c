@@ -27,6 +27,7 @@ Entity *player_new(Vector2D position)
 		60,
 		6);
 
+	self->isPlayer = 1;
 	self->maxHealth = 100;
 	self->health	= self->maxHealth;
 	self->maxMagic	= 100;
