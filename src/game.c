@@ -47,6 +47,8 @@ int main(int argc, char * argv[])
 	Zentity *monster4;
 	//Zentity *monster5;
 	Zentity *player;
+	Zentity *bonfire1;
+	Zentity *bonfire2;
 
     /*program initializtion*/
     init_logger("gf2d.log");
@@ -70,6 +72,8 @@ int main(int argc, char * argv[])
 	// Entities
 	Zentity_manager_init(1024);
 	player = player_new(vector2d(600, 600));
+	bonfire1 = bonfire_new(vector2d(300, 400));
+	bonfire2 = bonfire_new(vector2d(800, 400));
 	monster1 = monster_new(vector2d(400, 400), 1);
 	monster2 = monster_new(vector2d(400, 500), 2);
 	monster3 = monster_new(vector2d(600, 500), 3);
@@ -88,11 +92,13 @@ int main(int argc, char * argv[])
 	Element* hplabel;
 	Element* mplabel;
 	Element* soulslabel;
+	Element* attacklabel;
 	TextLine str;
 
 	hplabel = gf2d_window_get_element_by_id(ui, 0);
 	mplabel = gf2d_window_get_element_by_id(ui, 1);
-	soulslabel = gf2d_window_get_element_by_id(ui, 2);
+	attacklabel = gf2d_window_get_element_by_id(ui, 2);
+	soulslabel = gf2d_window_get_element_by_id(ui, 3);
 
 	//gf2d_window_add_element(ui, );
 
@@ -114,10 +120,13 @@ int main(int argc, char * argv[])
 		// Player Magic UI
 		sprintf(str, "MP: %i / %i", player->magic, player->maxMagic);
 		gf2d_element_label_set_text(mplabel, str);
+		// Player Attack UI
+		sprintf(str, "Attack: %i", player->attack);
+		gf2d_element_label_set_text(attacklabel, str);
 		// Player Souls UI
 		sprintf(str, "Souls: %i", player->souls);
 		gf2d_element_label_set_text(soulslabel, str);
-		// Attack?
+		
         
 		// Zentity Test
 		Zentity_update_all();

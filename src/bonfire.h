@@ -1,5 +1,5 @@
-#ifndef __SHIELD_H__
-#define __SHIELD_H__
+#ifndef __BONFIRE_H__
+#define __BONFIRE_H__
 
 #include "entity.h"
 

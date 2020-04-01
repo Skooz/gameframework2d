@@ -31,6 +31,9 @@ typedef struct Zentity_S
 	int damage;		// The damage dealt by an Zentity.
 	int souls;		// Souls currency.
 
+	int isBonfire;
+	int bonfireUsed;
+
 	void(*think)(struct Zentity_S *self);   /**<called when an Zentity draws*/
 	void(*touch)(struct Zentity_S *self, struct Zentity_S *other);   /**<called when an Zentity touches another Zentity*/
 

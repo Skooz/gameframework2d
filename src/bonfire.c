@@ -1,7 +1,7 @@
 #include "simple_logger.h"
 #include "collisions.h"
 
-#include "shield.h"
+#include "bonfire.h"
 #include "level.h"
 
 #define ES_DEAD 1
@@ -14,6 +14,10 @@ void bonfire_think(Zentity *self)
 {
 	if (!self) return;
 
+	if (self->bonfireUsed == 1)
+		self->frame = 29;
+	else
+		self->frame = 28;
 	
 }
 
@@ -21,14 +25,14 @@ void bonfire_touch(Zentity *self, Zentity *other)
 {
 	if ((!self) || (!other) || self->state == ES_DEAD)return;
 
-	if (other->isPlayer) // Heal the player to full health when they're in the vicinity.
+	if (other->isPlayer && self->bonfireUsed == 0) // Heal the player to full health when they're in the vicinity.
 	{
+		self->bonfireUsed = 1;
 		other->health = other->maxHealth;
 		other->magic = other->maxMagic;
 	}
 
 }
-
 
 Zentity *bonfire_new(Vector2D position)
 {
@@ -50,6 +54,9 @@ Zentity *bonfire_new(Vector2D position)
 	self->touch = bonfire_touch;
 	vector2d_copy(self->position, position);
 	vector2d_set(self->drawOffset, -30, -30);
+
+	self->isBonfire = 1;
+	self->bonfireUsed = 0;
 
 	self->frame = 28;
 

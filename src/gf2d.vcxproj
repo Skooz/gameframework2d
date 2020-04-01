@@ -29,6 +29,7 @@
     <ClCompile Include="..\gfc\src\gfc_types.c" />
     <ClCompile Include="..\gfc\src\gfc_vector.c" />
     <ClCompile Include="arrow.c" />
+    <ClCompile Include="bloodstain.c" />
     <ClCompile Include="bonfire.c" />
     <ClCompile Include="camera.c" />
     <ClCompile Include="gf2d_actor.c" />
@@ -107,6 +108,7 @@
     <ClInclude Include="..\include\windows_common.h" />
     <ClInclude Include="..\include\world.h" />
     <ClInclude Include="arrow.h" />
+    <ClInclude Include="bloodstain.h" />
     <ClInclude Include="bonfire.h" />
     <ClInclude Include="monster.h" />
     <ClInclude Include="collisions.h" />

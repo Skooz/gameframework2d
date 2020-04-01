@@ -4,6 +4,10 @@
 #include "SDL_timer.h"
 #include "player.h"
 #include "level.h"
+#include "arrow.h"
+#include "shield.h"
+#include "sword.h"
+#include "bloodstain.h"
 
 #define ES_DEAD 1
 
@@ -12,7 +16,8 @@ void player_touch(Zentity *self, Zentity *other);
 
 Uint32 nextAttack; // Used with SDL_GetTicks() to create a delay between attacks.
 Uint32 nextMessage;
-Zentity *lastBonfire;
+Zentity* lastBonfire;
+Zentity* playerBloodstain;
 
 // Create a player
 Zentity *player_new(Vector2D position)
@@ -299,10 +304,14 @@ void player_think(Zentity *self)
 	}
 
 	// ** DEATH **
-	if (self->health <= 0)
+	if (self->health <= 0 || keys[SDL_SCANCODE_K])
 	{
-		// new bloodstain(self->position, self->souls)
-		// self->position = lastBonfire->position;
+		playerBloodstain = bloodstain_new(self->position, self->souls);
+
+		if (lastBonfire)
+			self->position = lastBonfire->position;
+		else
+			self->position = vector2d(600, 600);
 
 		// Reset Stats
 		self->health = self->maxHealth;
@@ -315,14 +324,15 @@ void player_think(Zentity *self)
 void player_touch(Zentity *self, Zentity *other)
 {
 	if (!self || !other) return;
-	/*
-	const Uint8 * keys;
 
-	keys = SDL_GetKeyboardState(NULL);
-
-	if (keys[SDL_SCANCODE_X])
+	if (other->isBonfire == 1 && other->bonfireUsed == 0)
 	{
-		// Interact?
+		if (lastBonfire)
+		{
+			lastBonfire->bonfireUsed = 0;
+		}
+		lastBonfire = other;
+		slog("touched bonfire");
 	}
-	*/
+
 }
