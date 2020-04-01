@@ -3,7 +3,7 @@
 
 #include "entity.h"
 
-Entity *player_new(Vector2D position);
+Zentity *player_new(Vector2D position);
 
 
 #endif

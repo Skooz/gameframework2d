@@ -3,7 +3,7 @@
 
 #include "entity.h"
 
-Entity *monster_new(Vector2D position, int type);
+Zentity *monster_new(Vector2D position, int type);
 
 
 #endif

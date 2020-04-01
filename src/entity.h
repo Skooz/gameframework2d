@@ -1,67 +1,67 @@
-#ifndef __ENTITY_H__
-#define __ENTITY_H__
+#ifndef __Zentity_H__
+#define __Zentity_H__
 
 #include "gf2d_sprite.h"
 
-typedef struct Entity_S
+typedef struct Zentity_S
 {
-	Uint8       _inuse;     /**<check if this entity in memory is active or not*/
-	Sprite     *sprite;     /**<a pointer to the sprite that is used by this entity*/
+	Uint8       _inuse;     /**<check if this Zentity in memory is active or not*/
+	Sprite     *sprite;     /**<a pointer to the sprite that is used by this Zentity*/
 	int         state;
 	float       frame;      /**<current frame for the sprite*/
 
-	Vector2D    position;   /**<where the entity is in 2D space*/
+	Vector2D    position;   /**<where the Zentity is in 2D space*/
 	Vector2D    velocity;
 
 	Vector2D    drawOffset;
-	float       radius;     /**<how wide this entity is*/
+	float       radius;     /**<how wide this Zentity is*/
 	Vector2D    size;
 
 	Uint32 nextMove;
 	int moveDir;
 	int monsterType;
 
-	//Entity *owner;
-	int isPlayer;	// Identify whether or not the entity is a player.
+	//Zentity *owner;
+	int isPlayer;	// Identify whether or not the Zentity is a player.
 	int health;		// The player's health value.
 	int maxHealth;	// The player's max health value.
 	int magic;		// The player's magic value.
 	int maxMagic;	// The player's max magic value.
 	int attack;		// The player's attack damage modifier.
-	int damage;		// The damage dealt by an entity.
+	int damage;		// The damage dealt by an Zentity.
 	int souls;		// Souls currency.
 
-	void(*think)(struct Entity_S *self);   /**<called when an entity draws*/
-	void(*touch)(struct Entity_S *self, struct Entity_S *other);   /**<called when an entity touches another entity*/
+	void(*think)(struct Zentity_S *self);   /**<called when an Zentity draws*/
+	void(*touch)(struct Zentity_S *self, struct Zentity_S *other);   /**<called when an Zentity touches another Zentity*/
 
-}Entity;
+}Zentity;
 
 /**
-* @brief get a pointer to a new entity
-* @return NULL on out of memory or error, a pointer to a blank entity otherwise
+* @brief get a pointer to a new Zentity
+* @return NULL on out of memory or error, a pointer to a blank Zentity otherwise
 */
-Entity *entity_new();
+Zentity *Zentity_new();
 
 /**
-* @brief initialize the entity resource manager
+* @brief initialize the Zentity resource manager
 * @param maxEnts upper bound of maximum concurrent entities to be supported
-* @note must be called before creating a new entity
+* @note must be called before creating a new Zentity
 */
-void entity_manager_init(Uint32 maxEnts);
+void Zentity_manager_init(Uint32 maxEnts);
 
 /**
-* @brief free a previously allocated entity
-* @param self a pointer to the entity to free
+* @brief free a previously allocated Zentity
+* @param self a pointer to the Zentity to free
 */
-void entity_free(Entity *self);
+void Zentity_free(Zentity *self);
 
 /**
-* @brief update every active entity
+* @brief update every active Zentity
 */
-void entity_update_all();
+void Zentity_update_all();
 /**
-* @brief draww every active entity
+* @brief draww every active Zentity
 */
-void entity_draw_all();
+void Zentity_draw_all();
 
 #endif

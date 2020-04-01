@@ -9,7 +9,7 @@
 Uint32 moveDistance = 1300;
 
 // thonk
-void monster_think(Entity *self)
+void monster_think(Zentity *self)
 {
 	if (!self) return;
 
@@ -165,7 +165,7 @@ void monster_think(Entity *self)
 	if (self->state == ES_DEAD)
 	{
 		
-		entity_free(self);
+		Zentity_free(self);
 	}
 
 	/*
@@ -180,7 +180,7 @@ void monster_think(Entity *self)
 }
 
 // If we touch something
-void monster_touch(Entity *self, Entity *other)
+void monster_touch(Zentity *self, Zentity *other)
 {
 	if ((!self) || (!other) || self->state == ES_DEAD)return;
 	
@@ -197,16 +197,17 @@ void monster_touch(Entity *self, Entity *other)
 
 
 // Create a new monster
-Entity *monster_new(Vector2D position, int type)
+Zentity *monster_new(Vector2D position, int type)
 {
-	Entity *self;
-	self = entity_new();
+	Zentity *self;
+	self = Zentity_new();
 	if (!self)return NULL;
 	self->sprite = gf2d_sprite_load_all(
 		"images/enemy.png",
 		60,
 		60,
-		15);
+		15,
+		false);
 
 	self->radius = 15;
 	self->size.x = 30;

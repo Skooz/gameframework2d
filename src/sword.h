@@ -3,7 +3,7 @@
 
 #include "entity.h"
 
-Entity *sword_new(Vector2D position, Vector2D velocity, Entity *own);
+Zentity *sword_new(Vector2D position, Zentity *own);
 
 
 #endif

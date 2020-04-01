@@ -7,25 +7,26 @@
 
 #define ES_DEAD 1
 
-void player_think(Entity *self);
-void player_touch(Entity *self, Entity *other);
+void player_think(Zentity *self);
+void player_touch(Zentity *self, Zentity *other);
 
 Uint32 nextAttack; // Used with SDL_GetTicks() to create a delay between attacks.
 Uint32 nextMessage;
-Entity *lastBonfire;
+Zentity *lastBonfire;
 
 // Create a player
-Entity *player_new(Vector2D position)
+Zentity *player_new(Vector2D position)
 {
-	Entity *self;
-	self = entity_new();
+	Zentity *self;
+	self = Zentity_new();
 	if (!self) return NULL;
 
 	self->sprite = gf2d_sprite_load_all(
 		"images/lonk2.png",
 		60,
 		60,
-		6);
+		6,
+		false);
 
 	self->isPlayer = 1;
 	self->maxHealth = 100;
@@ -49,7 +50,7 @@ Entity *player_new(Vector2D position)
 }
 
 // thonk
-void player_think(Entity *self)
+void player_think(Zentity *self)
 {
 	if (!self) return;
 
@@ -152,9 +153,9 @@ void player_think(Entity *self)
 
 
 	// ** ATTACKS **
-	if (keys[SDL_SCANCODE_Q]) // Shield Bash - Knock enemies back - Need a shield entity
+	if (keys[SDL_SCANCODE_Q]) // Shield Bash - Knock enemies back - Need a shield Zentity
 	{
-		Entity *shield;
+		Zentity *shield;
 		if (direction == 1)
 		{
 			self->frame = 15;
@@ -198,7 +199,7 @@ void player_think(Entity *self)
 	}
 	if (keys[SDL_SCANCODE_E]) // Sword
 	{
-		Entity *sword_swipe;
+		Zentity *sword_swipe;
 		if (direction == 1)
 		{
 			self->frame = 15;
@@ -245,7 +246,7 @@ void player_think(Entity *self)
 		if (SDL_GetTicks() > nextAttack)
 		{
 			nextAttack = SDL_GetTicks() + 300;
-			Entity *arrow;
+			Zentity *arrow;
 			if (direction == 1)
 			{
 				arrow = arrow_new(vector2d(self->position.x, self->position.y-30), vector2d(0, -5), direction, self);
@@ -264,7 +265,7 @@ void player_think(Entity *self)
 			}
 		}
 	}
-	if (keys[SDL_SCANCODE_F]) // Sword spin - Might want a unique entity for this instead.
+	if (keys[SDL_SCANCODE_F]) // Sword spin - Might want a unique Zentity for this instead.
 	{
 		if (SDL_GetTicks() > nextAttack)
 		{
@@ -272,7 +273,7 @@ void player_think(Entity *self)
 			{
 				self->magic -= 10;
 				nextAttack = SDL_GetTicks() + 1000;
-				Entity *sword;
+				Zentity *sword;
 				sword = sword_new(vector2d(self->position.x, self->position.y - 50), self);
 				sword_new(vector2d(self->position.x+30, self->position.y - 30), self);
 				sword_new(vector2d(self->position.x-30, self->position.y - 30), self);
@@ -311,10 +312,10 @@ void player_think(Entity *self)
 }
 
 
-void player_touch(Entity *self, Entity *other)
+void player_touch(Zentity *self, Zentity *other)
 {
 	if (!self || !other) return;
-
+	/*
 	const Uint8 * keys;
 
 	keys = SDL_GetKeyboardState(NULL);
@@ -323,4 +324,5 @@ void player_touch(Entity *self, Entity *other)
 	{
 		// Interact?
 	}
+	*/
 }

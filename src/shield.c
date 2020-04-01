@@ -8,13 +8,13 @@
 
 Uint32 lifetime;
 int direction;
-Entity *owner;
+Zentity *owner;
 
-void shield_think(Entity *self)
+void shield_think(Zentity *self)
 {
-	if (!self) return;
+	float mx, my;
 
-	int mx, my;
+	if (!self) return;
 
 	if (self->souls > 0)
 	{
@@ -23,17 +23,17 @@ void shield_think(Entity *self)
 	}
 
 	if (SDL_GetTicks() > lifetime || self->state == ES_DEAD)
-		entity_free(self);
-
+		Zentity_free(self);
+	/*
 	if (collide_circle(self->position, self->radius, vector2d(mx, my), 1))
 	{
 		self->state = ES_DEAD;
 		vector2d_set(self->velocity, 0, 0);
 		return;
-	}
+	}*/
 }
 
-void shield_touch(Entity *self, Entity *other)
+void shield_touch(Zentity *self, Zentity *other)
 {
 	if ((!self) || (!other) || self->state == ES_DEAD)return;
 
@@ -65,16 +65,17 @@ void shield_touch(Entity *self, Entity *other)
 }
 
 
-Entity *shield_new(Vector2D position, int dir, Entity *own)
+Zentity *shield_new(Vector2D position, int dir, Zentity *own)
 {
-	Entity *self;
-	self = entity_new();
+	Zentity *self;
+	self = Zentity_new();
 	if (!self)return NULL;
 	self->sprite = gf2d_sprite_load_all(
 		"",
 		128,
 		128,
-		16);
+		16,
+		false);
 	self->radius = 15;
 	self->size.x = 30;
 	self->size.y = 30;

@@ -4,12 +4,24 @@
 
 #include "gf2d_graphics.h"
 #include "gf2d_sprite.h"
+
+#include "gf2d_entity.h"
+#include "gf2d_windows.h"
+#include "gf2d_elements.h"
 #include "gf2d_font.h"
+#include "gfc_input.h"
+#include "gf2d_element_button.h"
+#include "gf2d_element_label.h"
+#include "gf2d_element_actor.h"
+#include "gf2d_mouse.h"
 
 #include "entity.h"
 #include "monster.h"
 #include "player.h"
 #include "level.h"
+
+Window *ui;
+Window* test;
 
 
 
@@ -19,20 +31,22 @@ int main(int argc, char * argv[])
     int done = 0;
     const Uint8 * keys;
 	Sprite *mouse;
+
+	char windowTitle[30];
     
     int mx,my;
     float mf = 0;
     Vector4D mouseColor = {255,100,255,200};
 
-	// Entity Test
+	// Zentity Test
 	SDL_Rect bounds = { 0, 0, 1200, 720 };
 	Level *level;
-	Entity *monster1;
-	Entity *monster2;
-	Entity *monster3;
-	Entity *monster4;
-	//Entity *monster5;
-	Entity *player;
+	Zentity *monster1;
+	Zentity *monster2;
+	Zentity *monster3;
+	Zentity *monster4;
+	//Zentity *monster5;
+	Zentity *player;
 
     /*program initializtion*/
     init_logger("gf2d.log");
@@ -51,12 +65,10 @@ int main(int argc, char * argv[])
 
     /*demo setup*/
 	level = level_new("images/backgrounds/zeldaworld.png", bounds);
-    mouse = gf2d_sprite_load_all("images/pointer.png",32,32,16);
-
-    /*main game loop*/
+    mouse = gf2d_sprite_load_all("images/pointer.png",32,32,16, false);
 
 	// Entities
-	entity_manager_init(1024);
+	Zentity_manager_init(1024);
 	player = player_new(vector2d(600, 600));
 	monster1 = monster_new(vector2d(400, 400), 1);
 	monster2 = monster_new(vector2d(400, 500), 2);
@@ -64,18 +76,52 @@ int main(int argc, char * argv[])
 	monster4 = monster_new(vector2d(700, 500), 4);
 	//monster5 = monster_new(vector2d(400, 400), 5);
 
-	
+	// Windows
+	gf2d_font_init("config/font.cfg");
+	// Input?
+	gf2d_action_list_init(32);
+	gf2d_windows_init(10);
+
+	ui = gf2d_window_new();
+	ui = gf2d_window_load("config/ui.json");
+
+	Element* hplabel;
+	Element* mplabel;
+	Element* soulslabel;
+	TextLine str;
+
+	hplabel = gf2d_window_get_element_by_id(ui, 0);
+	mplabel = gf2d_window_get_element_by_id(ui, 1);
+	soulslabel = gf2d_window_get_element_by_id(ui, 2);
+
+	//gf2d_window_add_element(ui, );
+
+	/*main game loop*/
     while(!done)
     {
         SDL_PumpEvents();   // update SDL's internal event structures
         keys = SDL_GetKeyboardState(NULL); // get the keyboard state for this frame
-        /*update things here*/
+        
+		/*update things here*/
         SDL_GetMouseState(&mx,&my);
         mf+=0.1;
         if (mf >= 16.0)mf = 0;
+
+		// Update UI
+		// Player Health UI
+		sprintf(str, "HP: %i / %i", player->health, player->maxHealth);
+		gf2d_element_label_set_text(hplabel, str);
+		// Player Magic UI
+		sprintf(str, "MP: %i / %i", player->magic, player->maxMagic);
+		gf2d_element_label_set_text(mplabel, str);
+		// Player Souls UI
+		sprintf(str, "Souls: %i", player->souls);
+		gf2d_element_label_set_text(soulslabel, str);
+		// Attack?
         
-		// Entity Test
-		entity_update_all();
+		// Zentity Test
+		Zentity_update_all();
+		gf2d_windows_update_all();
         
         gf2d_graphics_clear_screen();// clears drawing buffers
         // all drawing should happen betweem clear_screen and next_frame
@@ -83,8 +129,9 @@ int main(int argc, char * argv[])
             //gf2d_sprite_draw_image(sprite,vector2d(0,0));
 			level_draw(level);
             
-			// Entity Test
-			entity_draw_all();
+			// Zentity Test
+			Zentity_draw_all();
+			gf2d_windows_draw_all();
 
 
             //UI elements last
@@ -99,19 +146,9 @@ int main(int argc, char * argv[])
                 (int)mf);
         gf2d_grahics_next_frame();// render current draw frame and skip to the next frame
         
-
-		// Entity Movement?
-		if (keys[SDL_SCANCODE_UP]);
-		if (keys[SDL_SCANCODE_DOWN]);
-		if (keys[SDL_SCANCODE_LEFT]);
-		if (keys[SDL_SCANCODE_RIGHT]);
-
-
         if (keys[SDL_SCANCODE_ESCAPE]) done = 1; // exit condition
-		// Entity Test
-		//if (keys[SDL_SCANCODE_SPACE]) entity_free(bug); // free bug
-		//slog("Rendering at %f FPS",gf2d_graphics_get_frames_per_second());
 
+		//slog("Rendering at %f FPS",gf2d_graphics_get_frames_per_second());
     }
 	level_free(level);
 

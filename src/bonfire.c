@@ -8,16 +8,16 @@
 
 Uint32 lifetime;
 int direction;
-Entity *owner;
+Zentity *owner;
 
-void bonfire_think(Entity *self)
+void bonfire_think(Zentity *self)
 {
 	if (!self) return;
 
 	
 }
 
-void bonfire_touch(Entity *self, Entity *other)
+void bonfire_touch(Zentity *self, Zentity *other)
 {
 	if ((!self) || (!other) || self->state == ES_DEAD)return;
 
@@ -30,16 +30,19 @@ void bonfire_touch(Entity *self, Entity *other)
 }
 
 
-Entity *bonfire_new(Vector2D position)
+Zentity *bonfire_new(Vector2D position)
 {
-	Entity *self;
-	self = entity_new();
+	Zentity *self;
+	self = Zentity_new();
+
 	if (!self)return NULL;
+
 	self->sprite = gf2d_sprite_load_all(
 		"images/lonk2.png",
 		128,
 		128,
-		16);
+		16,
+		false);
 	self->radius = 15;
 	self->size.x = 30;
 	self->size.y = 30;
@@ -48,7 +51,7 @@ Entity *bonfire_new(Vector2D position)
 	vector2d_copy(self->position, position);
 	vector2d_set(self->drawOffset, -30, -30);
 
-	self->frame = 28
+	self->frame = 28;
 
 	return self;
 }

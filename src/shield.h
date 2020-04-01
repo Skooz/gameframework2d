@@ -3,7 +3,7 @@
 
 #include "entity.h"
 
-Entity *shield_new(Vector2D position, Vector2D velocity, Entity *own);
+Zentity *shield_new(Vector2D position, int dir, Zentity *own);
 
 
 #endif

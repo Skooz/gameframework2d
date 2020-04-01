@@ -7,13 +7,13 @@
 #define ES_DEAD 1
 
 Uint32 lifetime;
-Entity *owner;
+Zentity *owner;
 
-void sword_think(Entity *self)
+void sword_think(Zentity *self)
 {
-	if (!self) return;
+	float mx, my;
 
-	int mx, my;
+	if (!self) return;
 
 	if (self->souls > 0)
 	{
@@ -24,19 +24,19 @@ void sword_think(Entity *self)
 	 
 	if (SDL_GetTicks() > lifetime || self->state == ES_DEAD && self->souls == 0)
 	{
-		entity_free(self);
+		Zentity_free(self);
 	}
 	
-
+	/*
 	if (collide_circle(self->position, self->radius, vector2d(mx, my), 1))
 	{
 		self->state = ES_DEAD;
 		vector2d_set(self->velocity, 0, 0);
 		return;
-	}
+	}*/
 }
 
-void sword_touch(Entity *self, Entity *other)
+void sword_touch(Zentity *self, Zentity *other)
 {
 	if ((!self) || (!other) || self->state == ES_DEAD)return;
 
@@ -48,16 +48,17 @@ void sword_touch(Entity *self, Entity *other)
 }
 
 
-Entity *sword_new(Vector2D position, Entity *own)
+Zentity *sword_new(Vector2D position, Zentity *own)
 {
-	Entity *self;
-	self = entity_new();
+	Zentity *self;
+	self = Zentity_new();
 	if (!self)return NULL;
 	self->sprite = gf2d_sprite_load_all(
 		"",
 		128,
 		128,
-		16);
+		16,
+		false);
 	self->radius = 15;
 	self->size.x = 30;
 	self->size.y = 30;

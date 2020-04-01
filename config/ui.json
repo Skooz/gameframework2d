@@ -1,0 +1,45 @@
+{
+  "window": 
+  {
+    "color": 		[ 255, 255, 255, 255 ],
+    "dimensions": 	[ 0, 0, 200, 140 ],
+    "justify": 		"left",
+    "align": 		"bottom",
+    "elements": 
+	[
+      {
+        "type": 	"label",
+        "name": 	"hpLabel",
+        "id": 		0,
+        "bounds": 	[ 0, 0, 200, 140 ],
+        "color": 	[ 255, 255, 255, 255 ],
+        "text": 	"hpLabel",
+        "justify": 	"center",
+        "align": 	"top",
+        "style": 	"H4"
+      },
+	  {
+        "type": 	"label",
+        "name": 	"mpLabel",
+        "id": 		1,
+        "bounds": 	[ 0, 0, 200, 140 ],
+        "color": 	[ 255, 255, 255, 255 ],
+        "text": 	"mpLabel",
+        "justify": 	"center",
+        "align": 	"middle",
+        "style": 	"H4"
+      },
+	  {
+        "type": 	"label",
+        "name": 	"soulsLabel",
+        "id": 		2,
+        "bounds": 	[ 0, 0, 200, 140 ],
+        "color": 	[ 255, 255, 255, 255 ],
+        "text": 	"soulsLabel",
+        "justify": 	"center",
+        "align": 	"bottom",
+        "style": 	"H4"
+      }
+    ]
+  }
+}

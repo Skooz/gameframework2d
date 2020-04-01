@@ -7,13 +7,13 @@
 #define ES_DEAD 1
 
 int direction;
-Entity *owner;
+Zentity *owner;
 
-void arrow_think(Entity *self)
+void arrow_think(Zentity *self)
 {
-	if (!self) return;
+	float mx, my;
 
-	int mx, my;
+	if (!self) return;	
 
 	if (self->souls > 0)
 	{
@@ -22,17 +22,18 @@ void arrow_think(Entity *self)
 	}
 	
 	if (self->state == ES_DEAD)
-		entity_free(self);
-	/**/
+		Zentity_free(self);
+
+	/*
 	if (collide_circle(self->position, self->radius, vector2d(mx, my), 1))
 	{
 		self->state = ES_DEAD;
 		vector2d_set(self->velocity, 0, 0);
 		return;
-	}
+	}*/
 }
 
-void arrow_touch(Entity *self, Entity *other)
+void arrow_touch(Zentity *self, Zentity *other)
 {
 	if ((!self) || (!other) || self->state == ES_DEAD)return;
 
@@ -44,17 +45,18 @@ void arrow_touch(Entity *self, Entity *other)
 }
 
 
-Entity *arrow_new(Vector2D position, Vector2D velocity, int dir, Entity *own)
+Zentity *arrow_new(Vector2D position, Vector2D velocity, int dir, Zentity *own)
 {
-	Entity *self;
-	self = entity_new();
+	Zentity *self;
+	self = Zentity_new();
 	direction = dir;
 	if (!self)return NULL;
 	self->sprite = gf2d_sprite_load_all(
 		"images/lonk2.png",
 		128,
 		128,
-		16);
+		16,
+		false);
 	self->radius = 15;
 	self->size.x = 30;
 	self->size.y = 30;

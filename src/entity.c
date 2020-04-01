@@ -8,76 +8,76 @@
 typedef struct
 {
 	Uint32 maxEnts;     /**<max entities supported by the system*/
-	Entity *entityList; /**<pointer to an allocated array of entities*/
-}EntityManager;
+	Zentity *ZentityList; /**<pointer to an allocated array of entities*/
+}ZentityManager;
 
-static EntityManager entity_manager = { 0 };
+static ZentityManager Zentity_manager = { 0 };
 
 
-void entity_collide_check(Entity *entity);
+void Zentity_collide_check(Zentity *Zentity);
 
-void entity_manager_close()
+void Zentity_manager_close()
 {
 	int i;
-	for (i = 0; i < entity_manager.maxEnts; i++)
+	for (i = 0; i < Zentity_manager.maxEnts; i++)
 	{
-		if (entity_manager.entityList[i]._inuse)
+		if (Zentity_manager.ZentityList[i]._inuse)
 		{
-			entity_free(&entity_manager.entityList[i]);
+			Zentity_free(&Zentity_manager.ZentityList[i]);
 		}
 	}
-	entity_manager.maxEnts = 0;
-	free(entity_manager.entityList);
-	entity_manager.entityList = NULL;
-	slog("entity manager closed");
+	Zentity_manager.maxEnts = 0;
+	free(Zentity_manager.ZentityList);
+	Zentity_manager.ZentityList = NULL;
+	slog("Zentity manager closed");
 }
 
-void entity_manager_init(Uint32 maxEnts)
+void Zentity_manager_init(Uint32 maxEnts)
 {
-	if (entity_manager.entityList != NULL)
+	if (Zentity_manager.ZentityList != NULL)
 	{
 		//TODO: cleanup
 	}
 	if (!maxEnts)
 	{
-		slog("cannot intialize a zero size entity list!");
+		slog("cannot intialize a zero size Zentity list!");
 		return;
 	}
-	entity_manager.entityList = (Entity *)malloc(sizeof(Entity)* maxEnts);
-	if (entity_manager.entityList == NULL)
+	Zentity_manager.ZentityList = (Zentity *)malloc(sizeof(Zentity)* maxEnts);
+	if (Zentity_manager.ZentityList == NULL)
 	{
-		slog("failed to allocate %i entities for the entity manager", maxEnts);
+		slog("failed to allocate %i entities for the Zentity manager", maxEnts);
 		return;
 	}
-	entity_manager.maxEnts = maxEnts;
-	memset(entity_manager.entityList, 0, sizeof(Entity)*maxEnts);
-	slog("entity manager initialized");
-	atexit(entity_manager_close);
+	Zentity_manager.maxEnts = maxEnts;
+	memset(Zentity_manager.ZentityList, 0, sizeof(Zentity)*maxEnts);
+	slog("Zentity manager initialized");
+	atexit(Zentity_manager_close);
 }
 
 
-Entity *entity_new()
+Zentity *Zentity_new()
 {
 	int i;
-	for (i = 0; i < entity_manager.maxEnts; i++)
+	for (i = 0; i < Zentity_manager.maxEnts; i++)
 	{
-		if (entity_manager.entityList[i]._inuse)continue;
-		entity_manager.entityList[i]._inuse = 1;
-		return &entity_manager.entityList[i];
+		if (Zentity_manager.ZentityList[i]._inuse)continue;
+		Zentity_manager.ZentityList[i]._inuse = 1;
+		return &Zentity_manager.ZentityList[i];
 	}
-	slog("out of open entity slots in memory!");
+	slog("out of open Zentity slots in memory!");
 	return NULL;
 }
 
 
-void entity_free(Entity *self)
+void Zentity_free(Zentity *self)
 {
 	if (!self)return;
 	gf2d_sprite_free(self->sprite);
-	memset(self, 0, sizeof(Entity));
+	memset(self, 0, sizeof(Zentity));
 }
 
-void entity_update(Entity *self)
+void Zentity_update(Zentity *self)
 {
 	Vector2D normal = { 0, 0 };
 	if (!self)return;
@@ -111,29 +111,29 @@ void entity_update(Entity *self)
 			self->position.y = self->position.y - 2;
 		}
 	}
-	entity_collide_check(self);
+	Zentity_collide_check(self);
 }
 
-void entity_update_all()
+void Zentity_update_all()
 {
 	int i;
-	for (i = 0; i < entity_manager.maxEnts; i++)
+	for (i = 0; i < Zentity_manager.maxEnts; i++)
 	{
-		if (!entity_manager.entityList[i]._inuse)continue;
-		if (entity_manager.entityList[i].think)
+		if (!Zentity_manager.ZentityList[i]._inuse)continue;
+		if (Zentity_manager.ZentityList[i].think)
 		{
-			entity_manager.entityList[i].think(&entity_manager.entityList[i]);
+			Zentity_manager.ZentityList[i].think(&Zentity_manager.ZentityList[i]);
 		}
-		entity_update(&entity_manager.entityList[i]);
+		Zentity_update(&Zentity_manager.ZentityList[i]);
 	}
 }
 
-void entity_draw(Entity *self)
+void Zentity_draw(Zentity *self)
 {
 	SDL_Rect rect;
 	if (self == NULL)
 	{
-		slog("cannot draw sprite, NULL entity provided!");
+		slog("cannot draw sprite, NULL Zentity provided!");
 		return;
 	}
 	gf2d_sprite_draw(
@@ -150,7 +150,7 @@ void entity_draw(Entity *self)
 	//gf2d_draw_rect(rect, vector4d(255, 0, 255, 255));
 }
 
-void entity_entity_collide(Entity *e1, Entity *e2)
+void Zentity_Zentity_collide(Zentity *e1, Zentity *e2)
 {
 	if (collide_circle(e1->position, e1->radius, e2->position, e2->radius))
 	{
@@ -161,25 +161,25 @@ void entity_entity_collide(Entity *e1, Entity *e2)
 	}
 }
 
-void entity_collide_check(Entity *entity)
+void Zentity_collide_check(Zentity *Zentity)
 {
 	int i;
-	if (!entity)return;
-	for (i = 0; i < entity_manager.maxEnts; i++)
+	if (!Zentity)return;
+	for (i = 0; i < Zentity_manager.maxEnts; i++)
 	{
-		if (!entity_manager.entityList[i]._inuse)continue;
-		if (&entity_manager.entityList[i] == entity)continue;
-		entity_entity_collide(entity, &entity_manager.entityList[i]);
+		if (!Zentity_manager.ZentityList[i]._inuse)continue;
+		if (&Zentity_manager.ZentityList[i] == Zentity)continue;
+		Zentity_Zentity_collide(Zentity, &Zentity_manager.ZentityList[i]);
 	}
 }
 
-void entity_draw_all()
+void Zentity_draw_all()
 {
 	int i;
-	for (i = 0; i < entity_manager.maxEnts; i++)
+	for (i = 0; i < Zentity_manager.maxEnts; i++)
 	{
-		if (!entity_manager.entityList[i]._inuse)continue;
-		entity_draw(&entity_manager.entityList[i]);
+		if (!Zentity_manager.ZentityList[i]._inuse)continue;
+		Zentity_draw(&Zentity_manager.ZentityList[i]);
 	}
 }
 
