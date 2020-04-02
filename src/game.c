@@ -25,6 +25,7 @@
 #include "sword.h"
 #include "bloodstain.h"
 #include "fountain.h"
+#include "portal.h"
 
 Window *ui;
 Window* test;
@@ -79,13 +80,13 @@ int main(int argc, char * argv[])
 
 	// Entities
 	Zentity_manager_init(1024);
-	player = player_new(vector2d(600, 600));
+	player = player_new("saves/player.json");
 	bonfire1 = bonfire_new(vector2d(200, 400));
 	bonfire2 = bonfire_new(vector2d(900, 400));
 	fountain1 = fountain_new(vector2d(900, 550), 1);
 	fountain2 = fountain_new(vector2d(1000, 550), 2);
 	monster1 = monster_new(vector2d(400, 500), 1); // Up-Down
-	monster2 = monster_new(vector2d(500, 300), 2); // Side-Side
+	monster2 = monster_new(vector2d(500, 250), 2); // Side-Side
 	monster3 = monster_new(vector2d(600, 475), 3); // Rectangular
 	monster4 = monster_new(vector2d(700, 500), 4); // Stationary
 	//monster5 = monster_new(vector2d(400, 400), 5);
@@ -165,11 +166,21 @@ int main(int argc, char * argv[])
                 (int)mf);
         gf2d_grahics_next_frame();// render current draw frame and skip to the next frame
         
-        if (keys[SDL_SCANCODE_ESCAPE]) done = 1; // exit condition
+		// exit condition
 
+		if (keys[SDL_SCANCODE_F5])
+			player_save(player, "saves/player.json");
+
+		if (keys[SDL_SCANCODE_ESCAPE]) 
+		{
+			player_save(player, "saves/player.json");
+			done = 1;
+		}
+			
 		//slog("Rendering at %f FPS",gf2d_graphics_get_frames_per_second());
     }
 	level_free(level);
+	Zentity_manager_close();
 
     slog("---==== END ====---");
     return 0;

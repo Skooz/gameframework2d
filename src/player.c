@@ -8,6 +8,7 @@
 #include "shield.h"
 #include "sword.h"
 #include "bloodstain.h"
+#include "simple_json.h"
 
 #define ES_DEAD 1
 
@@ -20,9 +21,13 @@ Zentity* lastBonfire;
 Zentity* playerBloodstain;
 
 // Create a player
-Zentity *player_new(Vector2D position)
+Zentity *player_new(char* saveFile)
 {
 	Zentity *self;
+	SJson* file;
+	SJson* tempJson;
+	SJson* tempJsonValue;
+
 	self = Zentity_new();
 	if (!self) return NULL;
 
@@ -34,24 +39,75 @@ Zentity *player_new(Vector2D position)
 		false);
 
 	self->isPlayer = 1;
-	self->maxHealth = 100;
-	self->health	= self->maxHealth;
-	self->maxMagic	= 100;
-	self->magic		= self->maxMagic;
-	self->attack	= 1;
-	self->souls;
-
 	self->radius = 15;
 	self->size.x = 30;
 	self->size.y = 30;
-
 	self->think = player_think;
 	self->touch = player_touch;
-
-	vector2d_copy(self->position, position);
 	vector2d_set(self->drawOffset, -30, -30);
 
-	return self;
+	file = sj_load(saveFile);
+	
+	if (!file)
+	{
+		self->maxHealth = 100;
+		self->health	= self->maxHealth;
+		self->maxMagic	= 100;
+		self->magic		= self->maxMagic;
+		self->attack	= 1;
+		self->souls;
+		vector2d_set(self->position, 600, 600);
+		return self;
+	}
+	else
+	{
+		tempJson = sj_object_get_value(file, "stats");
+		if (tempJson) // Load  8 things
+		{
+			tempJsonValue = sj_array_get_nth(tempJson, 0);
+			if (tempJsonValue)
+			{
+				sj_get_integer_value(tempJsonValue, &self->health);
+			}
+			tempJsonValue = sj_array_get_nth(tempJson, 1);
+			if (tempJsonValue)
+			{
+				sj_get_integer_value(tempJsonValue, &self->maxHealth);
+			}
+			tempJsonValue = sj_array_get_nth(tempJson, 2);
+			if (tempJsonValue)
+			{
+				sj_get_integer_value(tempJsonValue, &self->magic);
+			}
+			tempJsonValue = sj_array_get_nth(tempJson, 3);
+			if (tempJsonValue)
+			{
+				sj_get_integer_value(tempJsonValue, &self->maxMagic);
+			}
+			tempJsonValue = sj_array_get_nth(tempJson, 4);
+			if (tempJsonValue)
+			{
+				sj_get_integer_value(tempJsonValue, &self->attack);
+			}
+			tempJsonValue = sj_array_get_nth(tempJson, 5);
+			if (tempJsonValue)
+			{
+				sj_get_integer_value(tempJsonValue, &self->souls);
+			}
+			tempJsonValue = sj_array_get_nth(tempJson, 6);
+			if (tempJsonValue)
+			{
+				sj_get_float_value(tempJsonValue, &self->position.x);
+			}
+			tempJsonValue = sj_array_get_nth(tempJson, 7);
+			if (tempJsonValue)
+			{
+				sj_get_float_value(tempJsonValue, &self->position.y);
+			}
+		}
+		slog("pos x: %i, pos y: %i", self->position.x, self->position.y);
+		return self;
+	}
 }
 
 // thonk
@@ -334,4 +390,25 @@ void player_touch(Zentity *self, Zentity *other)
 		lastBonfire = other;
 	}
 
+}
+
+void player_save(Zentity *self, char* saveFile) 
+{
+	SJson* file;
+	SJson* tempJson;
+	SJson* tempJsonValue;
+
+	file = sj_object_new();
+	tempJson = sj_array_new();
+	sj_array_append(tempJson, sj_new_int(self->health));
+	sj_array_append(tempJson, sj_new_int(self->maxHealth));
+	sj_array_append(tempJson, sj_new_int(self->magic));
+	sj_array_append(tempJson, sj_new_int(self->maxMagic));
+	sj_array_append(tempJson, sj_new_int(self->attack));
+	sj_array_append(tempJson, sj_new_int(self->souls));
+	sj_array_append(tempJson, sj_new_float(self->position.x));
+	sj_array_append(tempJson, sj_new_float(self->position.y));
+	sj_object_insert(file, "stats", tempJson);
+
+	sj_save(file, saveFile);
 }

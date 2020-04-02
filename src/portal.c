@@ -1,27 +1,24 @@
 #include "simple_logger.h"
 #include "collisions.h"
 
-#include "fountain.h"
+#include "portal.h"
 #include "level.h"
 
 #define ES_DEAD 1
 
-void fountain_think(Zentity *self)
+void portal_think(Zentity *self)
 {
 	if (!self) return;
 
 }
 
-void fountain_touch(Zentity *self, Zentity *other)
+void portal_touch(Zentity *self, Zentity *other)
 {
 	if ((!self) || (!other) || self->state == ES_DEAD)return;
-
-	SDL_Rect bounds = { 0, 0, 1200, 720 };
-	Zentity *underlevel = level_new("images/backgrounds/zeldaworld.png", bounds);
-
+	
 }
 
-Zentity *fountain_new(Vector2D position)
+Zentity *portal_new(Vector2D position)
 {
 	Zentity *self;
 	self = Zentity_new();
@@ -37,8 +34,8 @@ Zentity *fountain_new(Vector2D position)
 	self->radius = 30;
 	self->size.x = 30;
 	self->size.y = 30;
-	self->think = fountain_think;
-	self->touch = fountain_touch;
+	self->think = portal_think;
+	self->touch = portal_touch;
 	vector2d_copy(self->position, position);
 	vector2d_set(self->drawOffset, -30, -30);
 

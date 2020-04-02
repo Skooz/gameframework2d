@@ -3,7 +3,8 @@
 
 #include "entity.h"
 
-Zentity *player_new(Vector2D position);
+Zentity *player_new(char* saveFile);
 
+void player_save(Zentity *self, char* saveFile);
 
 #endif
