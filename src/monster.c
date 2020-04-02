@@ -7,11 +7,22 @@
 #define ES_DEAD 1
 
 Uint32 moveDistance = 1300;
+int bashTime;
 
 // thonk
 void monster_think(Zentity *self)
 {
 	if (!self) return;
+
+	/*
+	if (self->isBashed)
+	{	
+		self->isBashed = 0;
+		bashTime = SDL_GetTicks() + 400;
+	}
+	
+	if (bashTime > SDL_GetTicks()) return;
+	*/
 
 	// Animate movement - Determines frames based on velocity / direction.
 	// Frames : Down / Left / Up / Right
@@ -57,7 +68,7 @@ void monster_think(Zentity *self)
 		//case 5:
 	}
 
-	// Perform movement
+	// Patrolling Movement
 	switch (self->monsterType)
 	{
 	case 1:
@@ -131,6 +142,7 @@ void monster_think(Zentity *self)
 			{
 				self->moveDir = 2;
 				// Going up
+				vector2d_set(self->velocity, 0, 0);
 				self->frame = 92;
 				return;
 			}
@@ -138,6 +150,7 @@ void monster_think(Zentity *self)
 			{
 				self->moveDir = 3;
 				// Going left
+				vector2d_set(self->velocity, 0, 0);
 				self->frame = 91;
 				return;
 			}
@@ -145,6 +158,7 @@ void monster_think(Zentity *self)
 			{
 				self->moveDir = 4;
 				// Going down
+				vector2d_set(self->velocity, 0, 0);
 				self->frame = 90;
 				return;
 			}
@@ -152,6 +166,7 @@ void monster_think(Zentity *self)
 			{
 				self->moveDir = 1;
 				// Going right
+				vector2d_set(self->velocity, 0, 0);
 				self->frame = 93;
 				return;
 			}
@@ -185,6 +200,10 @@ void monster_touch(Zentity *self, Zentity *other)
 	if ((!self) || (!other) || self->state == ES_DEAD)return;
 	
 	self->health -= other->damage;
+
+	other->health -= 1;
+
+	vector2d_set(self->velocity, 0, 0);
 
 	if (self->health <= 0)
 	{
@@ -221,6 +240,8 @@ Zentity *monster_new(Vector2D position, int type)
 
 	// Which monster? (1 - 5)
 	self->monsterType = type;
+
+	self->canBash = 1;
 
 	// Define our hit-points and such
 	self->maxHealth = 5;

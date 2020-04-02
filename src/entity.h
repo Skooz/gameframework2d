@@ -17,11 +17,15 @@ typedef struct Zentity_S
 	float       radius;     /**<how wide this Zentity is*/
 	Vector2D    size;
 
+
+	// Monsters
 	Uint32 nextMove;
 	int moveDir;
 	int monsterType;
+	int canBash;
+	int isBashed;
 
-	//Zentity *owner;
+	//Players
 	int isPlayer;	// Identify whether or not the Zentity is a player.
 	int health;		// The player's health value.
 	int maxHealth;	// The player's max health value.
@@ -31,8 +35,12 @@ typedef struct Zentity_S
 	int damage;		// The damage dealt by an Zentity.
 	int souls;		// Souls currency.
 
+	// Bonfires
 	int isBonfire;
 	int bonfireUsed;
+
+	// Fountains
+	int fountainType;
 
 	void(*think)(struct Zentity_S *self);   /**<called when an Zentity draws*/
 	void(*touch)(struct Zentity_S *self, struct Zentity_S *other);   /**<called when an Zentity touches another Zentity*/

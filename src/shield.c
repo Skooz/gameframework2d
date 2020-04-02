@@ -10,6 +10,8 @@ Uint32 lifetime;
 int direction;
 Zentity *owner;
 
+Uint32 bashTime;
+
 void shield_think(Zentity *self)
 {
 	float mx, my;
@@ -24,6 +26,7 @@ void shield_think(Zentity *self)
 
 	if (SDL_GetTicks() > lifetime || self->state == ES_DEAD)
 		Zentity_free(self);
+
 	/*
 	if (collide_circle(self->position, self->radius, vector2d(mx, my), 1))
 	{
@@ -37,28 +40,33 @@ void shield_touch(Zentity *self, Zentity *other)
 {
 	if ((!self) || (!other) || self->state == ES_DEAD)return;
 
-	slog("Hit for %i damage", self->damage);
+	//slog("Hit for %i damage", self->damage);
 
+	if (other->canBash)
+	{
+		//other->isBashed;
+		if (direction == 1)
+		{
+			//vector2d_set(other->velocity, 0, -3);
+			vector2d_set(other->position, other->position.x, other->position.y - 40);
+		}
+		if (direction == 2)
+		{
+			//vector2d_set(other->velocity, 0, 3);
+			vector2d_set(other->position, other->position.x, other->position.y + 40);
+		}
+		if (direction == 3)
+		{
+			//vector2d_set(other->velocity, -3, 0);
+			vector2d_set(other->position, other->position.x - 40, other->position.y);
+		}
+		if (direction == 4)
+		{
+			//vector2d_set(other->velocity, 3, 0);
+			vector2d_set(other->position, other->position.x + 40, other->position.y);
+		}
+	}
 	//self->state = ES_DEAD;
-
-	if (direction == 1)
-	{
-		vector2d_set(other->velocity, 0, -3);
-	}
-	if (direction == 2)
-	{
-		vector2d_set(other->velocity, 0, 3);
-	}
-	if (direction == 3)
-	{
-		vector2d_set(other->velocity, -3, 0);
-	}
-	if (direction == 4)
-	{
-		vector2d_set(other->velocity, 3, 0);
-	}
-	
-
 	// Do damage
 
 	vector2d_set(self->velocity, 0, 0);

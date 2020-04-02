@@ -32,6 +32,7 @@
     <ClCompile Include="bloodstain.c" />
     <ClCompile Include="bonfire.c" />
     <ClCompile Include="camera.c" />
+    <ClCompile Include="fountain.c" />
     <ClCompile Include="gf2d_actor.c" />
     <ClCompile Include="gf2d_body.c" />
     <ClCompile Include="gf2d_collision.c" />
@@ -59,6 +60,7 @@
     <ClCompile Include="game.c" />
     <ClCompile Include="level.c" />
     <ClCompile Include="player.c" />
+    <ClCompile Include="portal.c" />
     <ClCompile Include="shield.c" />
     <ClCompile Include="sword.c" />
     <ClCompile Include="windows_common.c" />
@@ -110,11 +112,13 @@
     <ClInclude Include="arrow.h" />
     <ClInclude Include="bloodstain.h" />
     <ClInclude Include="bonfire.h" />
+    <ClInclude Include="fountain.h" />
     <ClInclude Include="monster.h" />
     <ClInclude Include="collisions.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="level.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="portal.h" />
     <ClInclude Include="shield.h" />
     <ClInclude Include="sword.h" />
   </ItemGroup>

@@ -1,8 +1,8 @@
 {
   "window": 
   {
-    "color": 		[ 255, 255, 255, 255 ],
-    "dimensions": 	[ 0, 0, 200, 200 ],
+    "color": 		[ 255, 255, 255, 235 ],
+    "dimensions": 	[ 0, 0, 200, 150 ],
     "justify": 		"left",
     "align": 		"bottom",
     "elements": 
@@ -12,7 +12,7 @@
         "name": 	"hpLabel",
         "id": 		0,
         "bounds": 	[ 0, 0, 200, 100 ],
-        "color": 	[ 255, 255, 255, 255 ],
+        "color": 	[ 255, 0, 0, 255 ],
         "text": 	"hpLabel",
         "justify": 	"center",
         "align": 	"top",
@@ -23,7 +23,7 @@
         "name": 	"mpLabel",
         "id": 		1,
         "bounds": 	[ 0, 0, 200, 100 ],
-        "color": 	[ 255, 255, 255, 255 ],
+        "color": 	[ 0, 100, 255, 255 ],
         "text": 	"mpLabel",
         "justify": 	"center",
         "align": 	"middle",

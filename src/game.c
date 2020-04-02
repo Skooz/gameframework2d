@@ -16,9 +16,15 @@
 #include "gf2d_mouse.h"
 
 #include "entity.h"
+#include "level.h"
 #include "monster.h"
 #include "player.h"
-#include "level.h"
+#include "bonfire.h"
+#include "arrow.h"
+#include "shield.h"
+#include "sword.h"
+#include "bloodstain.h"
+#include "fountain.h"
 
 Window *ui;
 Window* test;
@@ -49,6 +55,8 @@ int main(int argc, char * argv[])
 	Zentity *player;
 	Zentity *bonfire1;
 	Zentity *bonfire2;
+	Zentity *fountain1;
+	Zentity *fountain2;
 
     /*program initializtion*/
     init_logger("gf2d.log");
@@ -72,12 +80,14 @@ int main(int argc, char * argv[])
 	// Entities
 	Zentity_manager_init(1024);
 	player = player_new(vector2d(600, 600));
-	bonfire1 = bonfire_new(vector2d(300, 400));
-	bonfire2 = bonfire_new(vector2d(800, 400));
-	monster1 = monster_new(vector2d(400, 400), 1);
-	monster2 = monster_new(vector2d(400, 500), 2);
-	monster3 = monster_new(vector2d(600, 500), 3);
-	monster4 = monster_new(vector2d(700, 500), 4);
+	bonfire1 = bonfire_new(vector2d(200, 400));
+	bonfire2 = bonfire_new(vector2d(900, 400));
+	fountain1 = fountain_new(vector2d(900, 550), 1);
+	fountain2 = fountain_new(vector2d(1000, 550), 2);
+	monster1 = monster_new(vector2d(400, 500), 1); // Up-Down
+	monster2 = monster_new(vector2d(500, 300), 2); // Side-Side
+	monster3 = monster_new(vector2d(600, 475), 3); // Rectangular
+	monster4 = monster_new(vector2d(700, 500), 4); // Stationary
 	//monster5 = monster_new(vector2d(400, 400), 5);
 
 	// Windows

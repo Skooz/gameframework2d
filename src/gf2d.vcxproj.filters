@@ -168,6 +168,12 @@
     <ClCompile Include="bloodstain.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="fountain.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="portal.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\gfc\simple_logger\include\simple_logger.h">
@@ -327,6 +333,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="bloodstain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fountain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="portal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

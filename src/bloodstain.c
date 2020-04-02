@@ -1,14 +1,10 @@
 #include "simple_logger.h"
 #include "collisions.h"
 
-#include "shield.h"
+#include "bloodstain.h"
 #include "level.h"
 
 #define ES_DEAD 1
-
-Uint32 lifetime;
-int direction;
-Zentity *owner;
 
 void bloodstain_think(Zentity *self)
 {
@@ -37,9 +33,9 @@ Zentity *bloodstain_new(Vector2D position, int droppedSouls)
 
 	self->sprite = gf2d_sprite_load_all(
 		"images/lonk2.png",
-		128,
-		128,
-		16,
+		60,
+		60,
+		6,
 		false);
 	self->radius = 15;
 	self->size.x = 30;

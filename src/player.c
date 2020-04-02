@@ -292,14 +292,14 @@ void player_think(Zentity *self)
 	}
 	if (keys[SDL_SCANCODE_T]) // Magic - Heal
 	{
-		if (self->health < self->maxHealth)
+		if (SDL_GetTicks() > nextAttack && self->health < self->maxHealth && self->magic > 10)
 		{
-			if (self->magic > 10)
-			{
-				self->magic -= 20;
-				self->health += 10;
-				slog("Healed!", self->health);
-			}
+			slog("Ticks %i > next %i", SDL_GetTicks(), nextAttack);
+			nextAttack = SDL_GetTicks() + 1000;
+			self->magic -= 10;
+			self->health += 10;
+			if (self->health > self->maxHealth) self->health = self->maxHealth;
+			slog("Healed!", self->health);
 		}
 	}
 
@@ -332,7 +332,6 @@ void player_touch(Zentity *self, Zentity *other)
 			lastBonfire->bonfireUsed = 0;
 		}
 		lastBonfire = other;
-		slog("touched bonfire");
 	}
 
 }
