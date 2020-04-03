@@ -309,8 +309,9 @@ void player_think(Zentity *self)
 	}
 	if (keys[SDL_SCANCODE_R]) // Arrow - Launch a projectile
 	{
-		if (SDL_GetTicks() > nextAttack)
+		if (SDL_GetTicks() > nextAttack && self->magic >= 5)
 		{
+			self->magic -= 5;
 			nextAttack = SDL_GetTicks() + 300;
 			Zentity *arrow;
 			if (direction == 1)

@@ -37,10 +37,19 @@ void arrow_touch(Zentity *self, Zentity *other)
 {
 	if ((!self) || (!other) || self->state == ES_DEAD)return;
 
-	slog("Hit for %i damage", self->damage);
 
-	self->state = ES_DEAD;
-
+	if (other->isPlayer)
+	{
+		other->magic += 5;
+		self->state = ES_DEAD;
+	}
+	else
+	{
+		slog("Hit for %i damage", self->damage);
+		self->state = ES_DEAD;
+	}
+	
+	
 	vector2d_set(self->velocity, 0, 0);
 }
 
