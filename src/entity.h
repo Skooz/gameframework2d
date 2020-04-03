@@ -17,6 +17,7 @@ typedef struct Zentity_S
 	float       radius;     /**<how wide this Zentity is*/
 	Vector2D    size;
 
+	SDL_Rect rect; // Rectangle to draw
 
 	// Monsters
 	Uint32 nextMove;
@@ -44,6 +45,7 @@ typedef struct Zentity_S
 
 	void(*think)(struct Zentity_S *self);   /**<called when an Zentity draws*/
 	void(*touch)(struct Zentity_S *self, struct Zentity_S *other);   /**<called when an Zentity touches another Zentity*/
+	void(*see)(struct Zentity_S *self, struct Zentity_S *other);   /**<called when an Zentity touches another Zentity*/
 
 }Zentity;
 

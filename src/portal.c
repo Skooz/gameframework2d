@@ -6,6 +6,10 @@
 
 #define ES_DEAD 1
 
+Level *previousLevel;
+Level *newLevel;
+int worldTo;
+
 void portal_think(Zentity *self)
 {
 	if (!self) return;
@@ -14,11 +18,18 @@ void portal_think(Zentity *self)
 
 void portal_touch(Zentity *self, Zentity *other)
 {
-	if ((!self) || (!other) || self->state == ES_DEAD)return;
+	if ((!self) || (!other) || (!other->isPlayer) || self->state == ES_DEAD)return;
 	
+	/*
+	if (previousLevel)
+	{
+		level_free(previousLevel);
+		Level *newLevel = level_new(worldTo);
+	}
+	*/
 }
 
-Zentity *portal_new(Vector2D position)
+Zentity *portal_new(Vector2D position, Level *pL, int wT)
 {
 	Zentity *self;
 	self = Zentity_new();
@@ -38,6 +49,9 @@ Zentity *portal_new(Vector2D position)
 	self->touch = portal_touch;
 	vector2d_copy(self->position, position);
 	vector2d_set(self->drawOffset, -30, -30);
+
+	worldTo = wT;
+	previousLevel = pL;
 
 	return self;
 }

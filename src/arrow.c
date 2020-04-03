@@ -53,9 +53,9 @@ Zentity *arrow_new(Vector2D position, Vector2D velocity, int dir, Zentity *own)
 	if (!self)return NULL;
 	self->sprite = gf2d_sprite_load_all(
 		"images/lonk2.png",
-		128,
-		128,
-		16,
+		60,
+		60,
+		6,
 		false);
 	self->radius = 15;
 	self->size.x = 30;

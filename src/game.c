@@ -45,19 +45,9 @@ int main(int argc, char * argv[])
     float mf = 0;
     Vector4D mouseColor = {255,100,255,200};
 
-	// Zentity Test
-	SDL_Rect bounds = { 0, 0, 1200, 720 };
+	// Entities
 	Level *level;
-	Zentity *monster1;
-	Zentity *monster2;
-	Zentity *monster3;
-	Zentity *monster4;
-	//Zentity *monster5;
 	Zentity *player;
-	Zentity *bonfire1;
-	Zentity *bonfire2;
-	Zentity *fountain1;
-	Zentity *fountain2;
 
     /*program initializtion*/
     init_logger("gf2d.log");
@@ -75,25 +65,16 @@ int main(int argc, char * argv[])
     SDL_ShowCursor(SDL_DISABLE);
 
     /*demo setup*/
-	level = level_new("images/backgrounds/zeldaworld.png", bounds);
-    mouse = gf2d_sprite_load_all("images/pointer.png",32,32,16, false);
-
-	// Entities
+	mouse = gf2d_sprite_load_all("images/pointer.png", 32, 32, 16, false);
 	Zentity_manager_init(1024);
+	
+	// Entities
+	level = level_new(1);
 	player = player_new("saves/player.json");
-	bonfire1 = bonfire_new(vector2d(200, 400));
-	bonfire2 = bonfire_new(vector2d(900, 400));
-	fountain1 = fountain_new(vector2d(900, 550), 1);
-	fountain2 = fountain_new(vector2d(1000, 550), 2);
-	monster1 = monster_new(vector2d(400, 500), 1); // Up-Down
-	monster2 = monster_new(vector2d(500, 250), 2); // Side-Side
-	monster3 = monster_new(vector2d(600, 475), 3); // Rectangular
-	monster4 = monster_new(vector2d(700, 500), 4); // Stationary
-	//monster5 = monster_new(vector2d(400, 400), 5);
-
+	
 	// Windows
-	gf2d_font_init("config/font.cfg");
 	// Input?
+	gf2d_font_init("config/font.cfg");
 	gf2d_action_list_init(32);
 	gf2d_windows_init(10);
 
@@ -110,8 +91,6 @@ int main(int argc, char * argv[])
 	mplabel = gf2d_window_get_element_by_id(ui, 1);
 	attacklabel = gf2d_window_get_element_by_id(ui, 2);
 	soulslabel = gf2d_window_get_element_by_id(ui, 3);
-
-	//gf2d_window_add_element(ui, );
 
 	/*main game loop*/
     while(!done)
@@ -138,8 +117,6 @@ int main(int argc, char * argv[])
 		sprintf(str, "Souls: %i", player->souls);
 		gf2d_element_label_set_text(soulslabel, str);
 		
-        
-		// Zentity Test
 		Zentity_update_all();
 		gf2d_windows_update_all();
         
@@ -147,14 +124,12 @@ int main(int argc, char * argv[])
         // all drawing should happen betweem clear_screen and next_frame
             //backgrounds drawn first
             //gf2d_sprite_draw_image(sprite,vector2d(0,0));
+			
 			level_draw(level);
-            
-			// Zentity Test
 			Zentity_draw_all();
-			gf2d_windows_draw_all();
-
 
             //UI elements last
+			gf2d_windows_draw_all();
             gf2d_sprite_draw(
                 mouse,
                 vector2d(mx,my),
@@ -165,11 +140,19 @@ int main(int argc, char * argv[])
                 &mouseColor,
                 (int)mf);
         gf2d_grahics_next_frame();// render current draw frame and skip to the next frame
-        
+		
 		// exit condition
 
-		if (keys[SDL_SCANCODE_F5])
-			player_save(player, "saves/player.json");
+		if (keys[SDL_SCANCODE_F7])
+		{
+			Zentity_manager_close();
+			//level = level_new("images/backgrounds/zeldaunder.png", level->bounds);
+		}
+		if (keys[SDL_SCANCODE_F8])
+		{
+			//if (level) level_free(level);
+			//level = level_new("images/backgrounds/zeldaunder.png", level->bounds);
+		}
 
 		if (keys[SDL_SCANCODE_ESCAPE]) 
 		{

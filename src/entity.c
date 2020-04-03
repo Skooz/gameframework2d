@@ -130,7 +130,7 @@ void Zentity_update_all()
 
 void Zentity_draw(Zentity *self)
 {
-	SDL_Rect rect;
+	
 	if (self == NULL)
 	{
 		slog("cannot draw sprite, NULL Zentity provided!");
@@ -145,9 +145,11 @@ void Zentity_draw(Zentity *self)
 		NULL,
 		NULL,
 		(Uint32)self->frame);
+
+	//Hitbox
 	gf2d_draw_circle(self->position, self->radius, vector4d(255, 0, 255, 255));
-	//gfc_rect_set(rect,self->position.x,self->position.y,self->size.x,self->size.y);
-	//gf2d_draw_rect(rect, vector4d(255, 0, 255, 255));
+	gf2d_draw_rect(self->rect, vector4d(0, 255, 255, 255));
+	
 }
 
 void Zentity_Zentity_collide(Zentity *e1, Zentity *e2)
@@ -161,6 +163,17 @@ void Zentity_Zentity_collide(Zentity *e1, Zentity *e2)
 	}
 }
 
+void Zentity_Zentity_sight(Zentity *e1, Zentity *e2)
+{
+	if (collide_rect(e1->rect, e2->rect))
+	{
+		if (e1->see)
+		{
+			e1->see(e1, e2);
+		}
+	}
+}
+
 void Zentity_collide_check(Zentity *Zentity)
 {
 	int i;
@@ -170,6 +183,7 @@ void Zentity_collide_check(Zentity *Zentity)
 		if (!Zentity_manager.ZentityList[i]._inuse)continue;
 		if (&Zentity_manager.ZentityList[i] == Zentity)continue;
 		Zentity_Zentity_collide(Zentity, &Zentity_manager.ZentityList[i]);
+		Zentity_Zentity_sight(Zentity, &Zentity_manager.ZentityList[i]);
 	}
 }
 

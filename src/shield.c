@@ -80,9 +80,9 @@ Zentity *shield_new(Vector2D position, int dir, Zentity *own)
 	if (!self)return NULL;
 	self->sprite = gf2d_sprite_load_all(
 		"",
-		128,
-		128,
-		16,
+		60,
+		60,
+		6,
 		false);
 	self->radius = 15;
 	self->size.x = 30;

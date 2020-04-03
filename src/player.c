@@ -14,6 +14,7 @@
 
 void player_think(Zentity *self);
 void player_touch(Zentity *self, Zentity *other);
+void player_see(Zentity *self, Zentity *other);
 
 Uint32 nextAttack; // Used with SDL_GetTicks() to create a delay between attacks.
 Uint32 nextMessage;
@@ -42,6 +43,7 @@ Zentity *player_new(char* saveFile)
 	self->radius = 15;
 	self->size.x = 30;
 	self->size.y = 30;
+	self->see = player_see;
 	self->think = player_think;
 	self->touch = player_touch;
 	vector2d_set(self->drawOffset, -30, -30);
@@ -119,6 +121,9 @@ void player_think(Zentity *self)
 	const Uint8 * keys;
 
 	keys = SDL_GetKeyboardState(NULL);
+
+	// Player's sight box
+	gfc_rect_set(self->rect, self->position.x-15, self->position.y-15, 30, 30);
 
 	// ** STATS ** 
 	if (keys[SDL_SCANCODE_F1] && nextMessage < SDL_GetTicks()) // Level Health
@@ -376,6 +381,10 @@ void player_think(Zentity *self)
 	}
 }
 
+void player_see(Zentity *self, Zentity *other)
+{
+	if (!self || !other) return;
+}
 
 void player_touch(Zentity *self, Zentity *other)
 {
@@ -397,6 +406,8 @@ void player_save(Zentity *self, char* saveFile)
 	SJson* file;
 	SJson* tempJson;
 	SJson* tempJsonValue;
+
+	//TODO: save active bonfire \ location
 
 	file = sj_object_new();
 	tempJson = sj_array_new();

@@ -43,9 +43,9 @@ Zentity *bonfire_new(Vector2D position)
 
 	self->sprite = gf2d_sprite_load_all(
 		"images/lonk2.png",
-		128,
-		128,
-		16,
+		60,
+		60,
+		6,
 		false);
 	self->radius = 15;
 	self->size.x = 30;
