@@ -74,19 +74,14 @@ Level *level_new(int worldNum)
 	Level *level;
 
 	// Background
-
-	if (worldNum == 2) // Underworld
-	{
-		backgroundFile = "images/backgrounds/zeldaunder.png";
-	}
-	else if (worldNum == 1) // 1 - Overworld
-	{
+	if (worldNum == 1) // 1 - Overworld
 		backgroundFile = "images/backgrounds/zeldaworld.png";
-	}
-	else // 0 - Title
-	{
+	else if (worldNum == 2) // Underworld
+		backgroundFile = "images/backgrounds/zeldaunder.png";
+	else if (worldNum == 3)
+		backgroundFile = "images/backgrounds/zeldaworld2.png";
+	else
 		backgroundFile = "images/backgrounds/zeldatitle.png";
-	}
 
 	level = (Level*)gfc_allocate_array(sizeof(Level), 1);
 	if (!level)return NULL;
@@ -95,47 +90,62 @@ Level *level_new(int worldNum)
 	THE_LEVEL = level;
 
 	// Entities
-	if (worldNum == 2) // 0 - Underworld
+	if (worldNum == 3) // 3 - Overworld 2
 	{
-		Zentity *portal; 
-		//Zentity *player;
-
 		level->player = player_new("saves/player.json");
 		level->player->position.x = 600;
 		level->player->position.y = 550;
-		portal = portal_new(vector2d(600, 650), level, 1);
+
+		Zentity *portal4;
+		portal4 = portal_new(vector2d(600, 650), level, 1);
+
+		Zentity *monster3;
+		monster3 = monster_new(vector2d(600, 475), 3); // Rectangular
+		Zentity *monster4;
+		monster4 = monster_new(vector2d(700, 500), 4); // Stationary
+	}
+	else if (worldNum == 2) // 2 - Underworld
+	{
+		level->player = player_new("saves/player.json");
+		level->player->position.x = 600;
+		level->player->position.y = 550;
+
+		Zentity *portal3;
+		Zentity *monster5;
+		Zentity *bonfire;
+
+		portal3 = portal_new(vector2d(600, 650), level, 1);
+		monster5 = monster_new(vector2d(600, 400), 5);
+		bonfire = bonfire_new(vector2d(600, 300));
 	}
 	else if (worldNum == 1) // 1 - Default
 	{
-		Zentity *monster1;
-		Zentity *monster2;
-		Zentity *monster3;
-		Zentity *monster4;
-		Zentity *monster5;
-		Zentity *bonfire1;
-		Zentity *bonfire2;
-		Zentity *bonfire3;
-		Zentity *fountain1;
-		Zentity *fountain2;
-		Zentity *portal;
-
 		level->player = player_new("saves/player.json");
 		level->player->position.x = 350;
 		level->player->position.y = 150;
 
-		portal = portal_new(vector2d(350, 100), level, 2);
-		bonfire3 = bonfire_new(vector2d(630, 630));
-		bonfire1 = bonfire_new(vector2d(200, 400));
-		bonfire2 = bonfire_new(vector2d(900, 400));
-		/*
+		Zentity *monster1;
+		monster1 = monster_new(vector2d(400, 550), 1); // Up-Down
+		Zentity *monster2;
+		monster2 = monster_new(vector2d(500, 300), 2); // Side-Side
+		Zentity *monster3;
+		monster3 = monster_new(vector2d(600, 500), 2); // Up-Down
+		Zentity *monster4;
+		monster4 = monster_new(vector2d(700, 525), 1); // Side-Side
+
+		Zentity *bonfire;
+		bonfire = bonfire_new(vector2d(400, 150));
+		
+		Zentity *fountain1;
 		fountain1 = fountain_new(vector2d(900, 550), 1);
+		Zentity *fountain2;
 		fountain2 = fountain_new(vector2d(1000, 550), 2);
-		monster1 = monster_new(vector2d(400, 500), 1); // Up-Down
-		monster2 = monster_new(vector2d(500, 250), 2); // Side-Side
-		monster3 = monster_new(vector2d(600, 475), 3); // Rectangular
-		monster4 = monster_new(vector2d(700, 500), 4); // Stationary
-		monster5 = monster_new(vector2d(300, 300), 5);
-		*/
+		
+		Zentity *portal2;
+		portal2 = portal_new(vector2d(600, 50), level, 3);
+		Zentity *portal;
+		portal = portal_new(vector2d(295, 50), level, 2);
+		
 	}
 	else // 0 - Title
 	{

@@ -48,22 +48,22 @@ void shield_touch(Zentity *self, Zentity *other)
 		if (direction == 1)
 		{
 			//vector2d_set(other->velocity, 0, -3);
-			vector2d_set(other->position, other->position.x, other->position.y - 40);
+			vector2d_set(other->position, other->position.x, other->position.y - 50);
 		}
 		if (direction == 2)
 		{
 			//vector2d_set(other->velocity, 0, 3);
-			vector2d_set(other->position, other->position.x, other->position.y + 40);
+			vector2d_set(other->position, other->position.x, other->position.y + 50);
 		}
 		if (direction == 3)
 		{
 			//vector2d_set(other->velocity, -3, 0);
-			vector2d_set(other->position, other->position.x - 40, other->position.y);
+			vector2d_set(other->position, other->position.x - 50, other->position.y);
 		}
 		if (direction == 4)
 		{
 			//vector2d_set(other->velocity, 3, 0);
-			vector2d_set(other->position, other->position.x + 40, other->position.y);
+			vector2d_set(other->position, other->position.x + 50, other->position.y);
 		}
 	}
 	//self->state = ES_DEAD;
@@ -84,7 +84,7 @@ Zentity *shield_new(Vector2D position, int dir, Zentity *own)
 		60,
 		6,
 		false);
-	self->radius = 15;
+	self->radius = 25;
 	self->size.x = 30;
 	self->size.y = 30;
 	self->think = shield_think;

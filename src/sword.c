@@ -59,7 +59,7 @@ Zentity *sword_new(Vector2D position, Zentity *own)
 		128,
 		16,
 		false);
-	self->radius = 15;
+	self->radius = 25;
 	self->size.x = 30;
 	self->size.y = 30;
 	self->think = sword_think;

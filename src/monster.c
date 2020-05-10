@@ -305,10 +305,20 @@ Zentity *monster_new(Vector2D position, int type)
 	self->canBash = 1;
 
 	// Define our hit-points and such
-	self->maxHealth = 5;
-	self->health = self->maxHealth;
+	if (self->monsterType == 5)
+	{
+		self->maxHealth = 30;
+		self->health = self->maxHealth;
+	}
+	else
+	{
+		self->maxHealth = 5;
+		self->health = self->maxHealth;
+	}
+
 	self->maxMagic = 0;
 	self->magic = self->maxMagic;
+
 	self->attack = 0;
 	self->damage = 0;
 

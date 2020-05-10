@@ -174,31 +174,9 @@ int main(int argc, char * argv[])
 
 void startGame()
 {
-	/* Level change
-	if (keys[SDL_SCANCODE_F7] && levelchange == 0)
-	{
-	levelchange = 1;
-	player_save(player, "saves/player.json");
-	Zentity_free_all();
-	level_free(level);
-	level = level_new(2);
-	player = player_new("saves/player.json");
-	}
-	if (keys[SDL_SCANCODE_F8] && levelchange == 1)
-	{
-	levelchange = 0;
-	player_save(player, "saves/player.json");
 	Zentity_free_all();
 	level_free(level);
 	level = level_new(1);
-	player = player_new("saves/player.json");
-	}
-	*/
-
-	Zentity_free_all();
-	level_free(level);
-	level = level_new(1);
-	//player = player_new("saves/player.json");
 	menu->nodraw = 1;
 	ui->nodraw = 0;
 }

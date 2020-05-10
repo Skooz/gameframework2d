@@ -8,7 +8,6 @@
 
 Level *level;
 Zentity *player;
-int worldTo;
 
 void portal_think(Zentity *self)
 {
@@ -20,11 +19,12 @@ void portal_touch(Zentity *self, Zentity *other)
 {
 	if ((!self) || (!other) || (!level) || (!other->isPlayer))return;
 
+	// store the variable because we're about to fuck everything
+	int wt = self->worldTo;
+
 	Zentity_free_all();
 	level_free(level);
-	level = level_new(worldTo);
-	
-
+	level = level_new(wt);
 }
 
 Zentity *portal_new(Vector2D position, Level *pL, int wT)
@@ -43,7 +43,7 @@ Zentity *portal_new(Vector2D position, Level *pL, int wT)
 		false);
 	*/
 
-	self->radius = 30;
+	self->radius = 60;
 	self->size.x = 30;
 	self->size.y = 30;
 	self->think = portal_think;
@@ -51,7 +51,7 @@ Zentity *portal_new(Vector2D position, Level *pL, int wT)
 	vector2d_copy(self->position, position);
 	vector2d_set(self->drawOffset, -30, -30);
 
-	worldTo = wT;
+	self->worldTo = wT;
 	level = pL;
 
 	return self;

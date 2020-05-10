@@ -42,6 +42,9 @@ typedef struct Zentity_S
 
 	// Fountains
 	int fountainType;
+	
+	// Portals
+	int worldTo;
 
 	void(*think)(struct Zentity_S *self);   /**<called when an Zentity draws*/
 	void(*touch)(struct Zentity_S *self, struct Zentity_S *other);   /**<called when an Zentity touches another Zentity*/
