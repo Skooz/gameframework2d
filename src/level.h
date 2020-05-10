@@ -3,14 +3,16 @@
 
 #include "gfc_types.h"
 #include "gf2d_sprite.h"
+#include "player.h"
+#include "entity.h"
 
 
 typedef struct
 {
 	Sprite *background;
 	SDL_Rect bounds;
+	Zentity* player;
 }Level;
-
 
 Level *level_new(int worldNum);
 void level_free(Level *level);

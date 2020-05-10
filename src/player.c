@@ -99,14 +99,15 @@ Zentity *player_new(char* saveFile)
 			tempJsonValue = sj_array_get_nth(tempJson, 6);
 			if (tempJsonValue)
 			{
-				sj_get_float_value(tempJsonValue, &self->position.x);
+				//sj_get_float_value(tempJsonValue, &self->position.x);
 			}
 			tempJsonValue = sj_array_get_nth(tempJson, 7);
 			if (tempJsonValue)
 			{
-				sj_get_float_value(tempJsonValue, &self->position.y);
+				//sj_get_float_value(tempJsonValue, &self->position.y);
 			}
 		}
+		vector2d_set(self->position, 600, 600);
 		slog("pos x: %i, pos y: %i", self->position.x, self->position.y);
 		return self;
 	}

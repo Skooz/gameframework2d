@@ -35,6 +35,7 @@ typedef struct Window_S
     int (*update)(struct Window_S *win,List *updateList);
     int (*draw)(struct Window_S *win);
     int (*free_data)(struct Window_S *win);
+	int nodraw;				/**<if true, do not draw window and its contents*/
     void *data;             /**<custom data*/
 }Window;
 
