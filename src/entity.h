@@ -44,6 +44,7 @@ typedef struct Zentity_S
 	int fountainType;
 	
 	// Portals
+	int isPortal;
 	int worldTo;
 
 	void(*think)(struct Zentity_S *self);   /**<called when an Zentity draws*/

@@ -80,6 +80,8 @@ Level *level_new(int worldNum)
 		backgroundFile = "images/backgrounds/zeldaunder.png";
 	else if (worldNum == 3)
 		backgroundFile = "images/backgrounds/zeldaworld2.png";
+	else if (worldNum == 4)
+		backgroundFile = "images/backgrounds/zeldaunder2.png";
 	else
 		backgroundFile = "images/backgrounds/zeldatitle.png";
 
@@ -90,14 +92,28 @@ Level *level_new(int worldNum)
 	THE_LEVEL = level;
 
 	// Entities
-	if (worldNum == 3) // 3 - Overworld 2
+	if (worldNum == 4)
 	{
 		level->player = player_new("saves/player.json");
 		level->player->position.x = 600;
 		level->player->position.y = 550;
 
-		Zentity *portal4;
-		portal4 = portal_new(vector2d(600, 650), level, 1);
+		Zentity *portal4t3;
+		portal4t3 = portal_new(vector2d(600, 700), level, 3, 90);
+
+		Zentity *monster6;
+		monster6 = monster_new(vector2d(700, 500), 4);
+	}
+	else if (worldNum == 3) // 3 - Overworld 2
+	{
+		level->player = player_new("saves/player.json");
+		level->player->position.x = 600;
+		level->player->position.y = 550;
+
+		Zentity *portal3t1;
+		portal3t1 = portal_new(vector2d(600, 750), level, 1, 90);
+		Zentity *portal3t4;
+		portal3t4 = portal_new(vector2d(575, 50), level, 4, 60);
 
 		Zentity *monster3;
 		monster3 = monster_new(vector2d(600, 475), 3); // Rectangular
@@ -110,11 +126,11 @@ Level *level_new(int worldNum)
 		level->player->position.x = 600;
 		level->player->position.y = 550;
 
-		Zentity *portal3;
+		Zentity *portal2t1;
 		Zentity *monster5;
 		Zentity *bonfire;
 
-		portal3 = portal_new(vector2d(600, 650), level, 1);
+		portal2t1 = portal_new(vector2d(600, 700), level, 1, 90);
 		monster5 = monster_new(vector2d(600, 400), 5);
 		bonfire = bonfire_new(vector2d(600, 300));
 	}
@@ -124,6 +140,7 @@ Level *level_new(int worldNum)
 		level->player->position.x = 350;
 		level->player->position.y = 150;
 
+		// 
 		Zentity *monster1;
 		monster1 = monster_new(vector2d(400, 550), 1); // Up-Down
 		Zentity *monster2;
@@ -133,18 +150,21 @@ Level *level_new(int worldNum)
 		Zentity *monster4;
 		monster4 = monster_new(vector2d(700, 525), 1); // Side-Side
 
+		// Bonfires
 		Zentity *bonfire;
 		bonfire = bonfire_new(vector2d(400, 150));
 		
+		// Fountains
 		Zentity *fountain1;
 		fountain1 = fountain_new(vector2d(900, 550), 1);
 		Zentity *fountain2;
 		fountain2 = fountain_new(vector2d(1000, 550), 2);
 		
-		Zentity *portal2;
-		portal2 = portal_new(vector2d(600, 50), level, 3);
-		Zentity *portal;
-		portal = portal_new(vector2d(295, 50), level, 2);
+		// Portals
+		Zentity *portal1t3;
+		portal1t3 = portal_new(vector2d(600, -50), level, 3, 90);
+		Zentity *portal1t2;
+		portal1t2 = portal_new(vector2d(295, 50), level, 2, 60);
 		
 	}
 	else // 0 - Title

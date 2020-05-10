@@ -27,7 +27,7 @@ void portal_touch(Zentity *self, Zentity *other)
 	level = level_new(wt);
 }
 
-Zentity *portal_new(Vector2D position, Level *pL, int wT)
+Zentity *portal_new(Vector2D position, Level *pL, int wT, int rad)
 {
 	Zentity *self;
 	self = Zentity_new();
@@ -43,7 +43,7 @@ Zentity *portal_new(Vector2D position, Level *pL, int wT)
 		false);
 	*/
 
-	self->radius = 60;
+	self->radius = rad;
 	self->size.x = 30;
 	self->size.y = 30;
 	self->think = portal_think;
@@ -51,6 +51,7 @@ Zentity *portal_new(Vector2D position, Level *pL, int wT)
 	vector2d_copy(self->position, position);
 	vector2d_set(self->drawOffset, -30, -30);
 
+	self->isPortal = 1;
 	self->worldTo = wT;
 	level = pL;
 

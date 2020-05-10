@@ -96,7 +96,7 @@ void Zentity_update(Zentity *self)
 
 	// Check level bounds
 	vector2d_add(self->position, self->position, self->velocity);
-	if (level_bounds_test_circle(level_get_active(), self->position, self->radius, &normal))
+	if (level_bounds_test_circle(level_get_active(), self->position, self->radius, &normal) && !self->isPortal)
 	{
 		if (normal.x > 0)
 		{
