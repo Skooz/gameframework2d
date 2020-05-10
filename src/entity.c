@@ -77,6 +77,18 @@ void Zentity_free(Zentity *self)
 	memset(self, 0, sizeof(Zentity));
 }
 
+void Zentity_free_all()
+{
+	int i;
+	for (i = 0; i < Zentity_manager.maxEnts; i++)
+	{
+		if (Zentity_manager.ZentityList[i]._inuse)
+		{
+			Zentity_free(&Zentity_manager.ZentityList[i]);
+		}
+	}
+}
+
 void Zentity_update(Zentity *self)
 {
 	Vector2D normal = { 0, 0 };

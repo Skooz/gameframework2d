@@ -69,6 +69,11 @@ void Zentity_manager_init(Uint32 maxEnts);
 void Zentity_free(Zentity *self);
 
 /**
+* @brief free all previously allocated Zentities
+*/
+void Zentity_free_all();
+
+/**
 * @brief update every active Zentity
 */
 void Zentity_update_all();
