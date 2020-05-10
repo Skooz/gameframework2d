@@ -76,7 +76,7 @@ int main(int argc, char * argv[])
 	Zentity_manager_init(1024);
 	
 	// Player & Level
-	level = level_new(1);
+	level = level_new(0);
 	player = player_new("saves/player.json");
 	
 	// UI & HUD
@@ -122,10 +122,6 @@ int main(int argc, char * argv[])
 
 		gf2d_mouse_update();
 		gf2d_windows_update_all();
-
-		if (menu->blocks_input){
-			slog("you did it");
-		}
 
 		// Update HUD
 		sprintf(str, "HP: %i / %i", player->health, player->maxHealth); // Player Health UI

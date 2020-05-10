@@ -64,13 +64,18 @@ Level *level_new(int worldNum)
 	Level *level;
 
 	// Background
+
 	if (worldNum == 2)
 	{
 		backgroundFile = "images/backgrounds/zeldaunder.png";
 	}
-	else // 1 - Default
+	else if (worldNum == 1) // 1 - Default
 	{
 		backgroundFile = "images/backgrounds/zeldaworld.png";
+	}
+	else if (worldNum == 0)
+	{
+		backgroundFile = "images/backgrounds/zeldatitle.png";
 	}
 
 	level = (Level*)gfc_allocate_array(sizeof(Level), 1);
