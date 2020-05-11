@@ -26,6 +26,7 @@
 
 
 static Level *THE_LEVEL = NULL;
+static int levelTag; // tag of the current level we're on
 
 Level *level_get_active()
 {
@@ -94,9 +95,12 @@ Level *level_new(int worldNum)
 	// Entities
 	if (worldNum == 4)
 	{
+		// 3 to 4
 		level->player = player_new("saves/player.json");
 		level->player->position.x = 600;
 		level->player->position.y = 550;
+
+		levelTag = 4;
 
 		Zentity *portal4t3;
 		portal4t3 = portal_new(vector2d(600, 700), level, 3, 90);
@@ -106,14 +110,34 @@ Level *level_new(int worldNum)
 	}
 	else if (worldNum == 3) // 3 - Overworld 2
 	{
+		// 1 to 3
+		// 4 to 3
+
 		level->player = player_new("saves/player.json");
-		level->player->position.x = 600;
-		level->player->position.y = 550;
+		if (levelTag == 4)
+		{
+			level->player->position.x = 575;
+			level->player->position.y = 135;
+		}
+		else
+		{
+			level->player->position.x = 600;
+			level->player->position.y = 625;
+		}
+
+		levelTag = 3;
 
 		Zentity *portal3t1;
 		portal3t1 = portal_new(vector2d(600, 750), level, 1, 90);
 		Zentity *portal3t4;
 		portal3t4 = portal_new(vector2d(575, 50), level, 4, 60);
+
+		/*
+		Zentity *fountain1;
+		fountain1 = fountain_new(vector2d(900, 550), 1);
+		Zentity *fountain2;
+		fountain2 = fountain_new(vector2d(1000, 550), 2);
+		*/
 
 		Zentity *monster3;
 		monster3 = monster_new(vector2d(600, 475), 3); // Rectangular
@@ -122,25 +146,40 @@ Level *level_new(int worldNum)
 	}
 	else if (worldNum == 2) // 2 - Underworld
 	{
+		// 1 to 2
 		level->player = player_new("saves/player.json");
 		level->player->position.x = 600;
 		level->player->position.y = 550;
 
+		levelTag = 2;
+		
 		Zentity *portal2t1;
-		Zentity *monster5;
-		Zentity *bonfire;
-
 		portal2t1 = portal_new(vector2d(600, 700), level, 1, 90);
+		Zentity *monster5;
 		monster5 = monster_new(vector2d(600, 400), 5);
+		Zentity *bonfire;
 		bonfire = bonfire_new(vector2d(600, 300));
 	}
 	else if (worldNum == 1) // 1 - Default
 	{
+		// 2 to 1
+		// 3 to 1
 		level->player = player_new("saves/player.json");
-		level->player->position.x = 350;
-		level->player->position.y = 150;
 
-		// 
+		if (levelTag == 3)
+		{
+			level->player->position.x = 600;
+			level->player->position.y = 80;
+		}
+		else
+		{
+			level->player->position.x = 295;
+			level->player->position.y = 140;
+		}
+
+		levelTag = 1;
+
+		// Monsters
 		Zentity *monster1;
 		monster1 = monster_new(vector2d(400, 550), 1); // Up-Down
 		Zentity *monster2;
@@ -154,12 +193,6 @@ Level *level_new(int worldNum)
 		Zentity *bonfire;
 		bonfire = bonfire_new(vector2d(400, 150));
 		
-		// Fountains
-		Zentity *fountain1;
-		fountain1 = fountain_new(vector2d(900, 550), 1);
-		Zentity *fountain2;
-		fountain2 = fountain_new(vector2d(1000, 550), 2);
-		
 		// Portals
 		Zentity *portal1t3;
 		portal1t3 = portal_new(vector2d(600, -50), level, 3, 90);
@@ -169,7 +202,7 @@ Level *level_new(int worldNum)
 	}
 	else // 0 - Title
 	{
-
+		levelTag = 0;
 	}
 
 	return level;

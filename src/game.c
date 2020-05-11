@@ -78,7 +78,7 @@ int main(int argc, char * argv[])
     /*demo setup*/
 
 	// Initialize
-	Zentity_manager_init(50);
+	Zentity_manager_init(100);
 	gf2d_font_init("config/font.cfg");
 	gfc_input_init("config/input.cfg");
 	gf2d_action_list_init(10);
@@ -174,11 +174,14 @@ int main(int argc, char * argv[])
 
 void startGame()
 {
-	Zentity_free_all();
-	level_free(level);
-	level = level_new(1);
+	if (ui->nodraw)
+	{
+		Zentity_free_all();
+		level_free(level);
+		level = level_new(1);
+		ui->nodraw = 0;
+	}
 	menu->nodraw = 1;
-	ui->nodraw = 0;
 }
 
 void exitGame()
