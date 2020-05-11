@@ -19,10 +19,13 @@ void player_see(Zentity *self, Zentity *other);
 Uint32 nextAttack; // Used with SDL_GetTicks() to create a delay between attacks.
 Uint32 nextMessage;
 Zentity* lastBonfire;
+static int lastBonfireLevel;
 Zentity* playerBloodstain;
 
+Level *level;
+
 // Create a player
-Zentity *player_new(char* saveFile)
+Zentity *player_new(char* saveFile, Level *lev)
 {
 	Zentity *self;
 	SJson* file;
@@ -38,6 +41,8 @@ Zentity *player_new(char* saveFile)
 		60,
 		6,
 		false);
+
+	level = lev;
 
 	self->isPlayer = 1;
 	self->radius = 15;
@@ -269,40 +274,48 @@ void player_think(Zentity *self)
 		Zentity *sword_swipe;
 		if (direction == 1)
 		{
+			//self->frame = 14;
 			self->frame = 15;
-			if (self->frame < 14 || self->frame >= 16) self->frame = 14;
+			//if (self->frame < 14 || self->frame >= 16) self->frame = 14;
 			if (SDL_GetTicks() > nextAttack)
 			{
+				
 				nextAttack = SDL_GetTicks() + 300;
 				sword_swipe = sword_new(vector2d(self->position.x, self->position.y - 50), self);
 			}
 		}
 		if (direction == 2)
 		{
+			//self->frame = 2;
 			self->frame = 3;
-			if (self->frame < 2 || self->frame >= 4) self->frame = 2;
+			//if (self->frame < 2 || self->frame >= 4) self->frame = 2;
 			if (SDL_GetTicks() > nextAttack)
 			{
+				
 				nextAttack = SDL_GetTicks() + 300;
 				sword_swipe = sword_new(vector2d(self->position.x, self->position.y + 50), self);
 			}
 		}
 		if (direction == 3)
 		{
+			//self->frame = 8;
 			self->frame = 9;
-			if (self->frame < 8 || self->frame >= 10) self->frame = 8;
+			//if (self->frame < 8 || self->frame >= 10) self->frame = 8;
 			if (SDL_GetTicks() > nextAttack)
 			{
+				
 				nextAttack = SDL_GetTicks() + 300;
 				sword_swipe = sword_new(vector2d(self->position.x - 50, self->position.y), self);
 			}
 		}
 		if (direction == 4)
 		{
+			//self->frame = 20;
 			self->frame = 21;
-			if (self->frame < 20 || self->frame >= 22) self->frame = 20;
+			//if (self->frame < 20 || self->frame >= 22) self->frame = 20;
 			if (SDL_GetTicks() > nextAttack)
 			{
+				
 				nextAttack = SDL_GetTicks() + 300;
 				sword_swipe = sword_new(vector2d(self->position.x + 50, self->position.y), self);
 			}
@@ -372,9 +385,17 @@ void player_think(Zentity *self)
 		playerBloodstain = bloodstain_new(self->position, self->souls);
 
 		if (lastBonfire)
+		{
+			/*
+			int bfid = lastBonfire->bonfireID;
+			slog("bfid: %i", bfid);
+			//level_free(level); 
+			//Zentity_free_all();
+			level = level_new(bfid);*/
 			self->position = lastBonfire->position;
+		}
 		else
-			self->position = vector2d(600, 600);
+			self->position = vector2d(600, 500);
 
 		// Reset Stats
 		self->health = self->maxHealth;

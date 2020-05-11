@@ -15,6 +15,7 @@ void arrow_think(Zentity *self)
 
 	if (!self) return;	
 
+	// HAHAHA
 	if (self->souls > 0)
 	{
 		owner->souls += self->souls;
@@ -37,10 +38,14 @@ void arrow_touch(Zentity *self, Zentity *other)
 {
 	if ((!self) || (!other) || self->state == ES_DEAD)return;
 
-
-	if (other->isPlayer)
+	if (other->isPlayer && !owner->monsterType == 5)
 	{
 		other->magic += 5;
+		self->state = ES_DEAD;
+	}
+	else if (other->isPlayer && owner->monsterType == 5)
+	{
+		other->health -= 20;
 		self->state = ES_DEAD;
 	}
 	else

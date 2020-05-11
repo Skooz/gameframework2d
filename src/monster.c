@@ -9,6 +9,7 @@
 Uint32 moveDistance = 1300;
 Zentity *target;
 int bashTime;
+Uint32 attackTime;
 
 // thonk
 void monster_think(Zentity *self)
@@ -25,7 +26,7 @@ void monster_think(Zentity *self)
 	if (bashTime > SDL_GetTicks()) return;
 	*/
 
-	// Animate movement - Determines frames based on velocity / direction.
+	// ANIMATE (MOVEMENT) - Determines frames based on velocity / direction.
 	// Frames : Down / Left / Up / Right
 	// Enemy 1: 15 / 16 / 17 / 18
 	// Enemy 2: 19 / 20 / 21 / 22
@@ -73,7 +74,7 @@ void monster_think(Zentity *self)
 		if (self->monsterType == 5) self->frame = 67;
 	}
 
-	// Patrolling Movement
+	// MOVEMENT
 	switch (self->monsterType)
 	{
 	case 1:
@@ -177,24 +178,28 @@ void monster_think(Zentity *self)
 			int mx = self->position.x;
 			if (ty > my) // go up
 			{
+				self->moveDir = 1;
 				self->position.y += 0.5;
 				gfc_rect_set(self->rect, self->position.x, self->position.y, 1, 200);
 				self->frame = 64;
 			}
 			if (ty < my) // go down
 			{
+				self->moveDir = 2;
 				self->position.y -= 0.5;
 				gfc_rect_set(self->rect, self->position.x, self->position.y - 200, 1, 200);
 				self->frame = 66;
 			}
 			if (tx < mx) // go left
 			{
+				self->moveDir = 3;
 				self->position.x -= 0.5;
 				gfc_rect_set(self->rect, self->position.x - 200, self->position.y, 200, 1);
 				self->frame = 65;
 			}
 			if (tx > mx) // go right
 			{
+				self->moveDir = 4;
 				self->position.x += 0.5;
 				gfc_rect_set(self->rect, self->position.x, self->position.y, 200, 1);
 				self->frame = 67;
@@ -228,8 +233,90 @@ void monster_think(Zentity *self)
 				return;
 			}
 		}
+	case 6: 
+		if (target && self->monsterType == 6) // Target Acquired
+		{ // down left up right Enemy 5: 90 / 91 / 92 / 93
+			int ty = target->position.y;
+			int tx = target->position.x;
+			int my = self->position.y;
+			int mx = self->position.x;
+			if (ty > my) // go up
+			{
+				self->position.y += 1;
+				gfc_rect_set(self->rect, self->position.x, self->position.y, 1, 200);
+				self->frame = 92;
+			}
+			if (ty < my) // go down
+			{
+				self->position.y -= 1;
+				gfc_rect_set(self->rect, self->position.x, self->position.y - 200, 1, 200);
+				self->frame = 90;
+			}
+			if (tx < mx) // go left
+			{
+				self->position.x -= 1;
+				gfc_rect_set(self->rect, self->position.x - 200, self->position.y, 200, 1);
+				self->frame = 91;
+			}
+			if (tx > mx) // go right
+			{
+				self->position.x += 1;
+				gfc_rect_set(self->rect, self->position.x, self->position.y, 200, 1);
+				self->frame = 93;
+			}
+		}
+		else if (SDL_GetTicks() > self->nextMove && !target) // Patrol
+		{
+			self->nextMove = SDL_GetTicks() + moveDistance;
+			if (self->moveDir == 1)
+			{
+				self->moveDir = 2;
+				vector2d_set(self->velocity, 0.1, 0);
+				return;
+			}
+			if (self->moveDir == 2)
+			{
+				self->moveDir = 3;
+				vector2d_set(self->velocity, 0, 0.1);
+				return;
+			}
+			if (self->moveDir == 3)
+			{
+				self->moveDir = 4;
+				vector2d_set(self->velocity, -0.1, 0);
+				return;
+			}
+			if (self->moveDir == 4)
+			{
+				self->moveDir = 1;
+				vector2d_set(self->velocity, 0, -0.1);
+				return;
+			}
+		}
 	}
 
+	// ATTACK
+	if (self->monsterType == 5 && target && SDL_GetTicks() > attackTime)
+	{
+		attackTime = SDL_GetTicks() + 2000;
+		Zentity *arrow;
+		if (self->moveDir == 2)
+		{
+			arrow = arrow_new(vector2d(self->position.x, self->position.y - 30), vector2d(0, -5), self->moveDir, self);
+		}
+		if (self->moveDir == 1)
+		{
+			arrow = arrow_new(vector2d(self->position.x, self->position.y + 30), vector2d(0, 5), self->moveDir, self);
+		}
+		if (self->moveDir == 3)
+		{
+			arrow = arrow_new(vector2d(self->position.x - 30, self->position.y), vector2d(-5, 0), self->moveDir, self);
+		}
+		if (self->moveDir == 4)
+		{
+			arrow = arrow_new(vector2d(self->position.x + 30, self->position.y), vector2d(5, 0), self->moveDir, self);
+		}
+	}
 
 	// DEATH
 	if (self->state == ES_DEAD)
@@ -243,9 +330,9 @@ void monster_think(Zentity *self)
 void monster_see(Zentity *self, Zentity *other)
 {
 	if (!self || !other) return;
-	if (other->isPlayer && !target && self->monsterType == 5 && SDL_GetTicks() > 2500)
+	if (other->isPlayer && !target && self->monsterType == 5 || self->monsterType == 6 && SDL_GetTicks() > 2500)
 	{
-		slog("I SEE YOU");
+		//slog("I SEE YOU");
 		target = other;
 	}
 		
@@ -266,7 +353,12 @@ void monster_touch(Zentity *self, Zentity *other)
 	if (self->health <= 0)
 	{
 		self->state = ES_DEAD;
-		other->souls += 100;
+		if (self->monsterType == 5)
+			other->souls += 500;
+		if (self->monsterType == 6)
+			other->souls += 1000;
+		else
+			other->souls += 50;
 		vector2d_set(self->velocity, 0, 0);
 	}
 	
@@ -308,6 +400,11 @@ Zentity *monster_new(Vector2D position, int type)
 	if (self->monsterType == 5)
 	{
 		self->maxHealth = 30;
+		self->health = self->maxHealth;
+	}
+	else if (self->monsterType == 6)
+	{
+		self->maxHealth = 60;
 		self->health = self->maxHealth;
 	}
 	else

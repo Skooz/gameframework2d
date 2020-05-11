@@ -34,7 +34,7 @@ void bonfire_touch(Zentity *self, Zentity *other)
 
 }
 
-Zentity *bonfire_new(Vector2D position)
+Zentity *bonfire_new(Vector2D position, int bid)
 {
 	Zentity *self;
 	self = Zentity_new();
@@ -57,6 +57,7 @@ Zentity *bonfire_new(Vector2D position)
 
 	self->isBonfire = 1;
 	self->bonfireUsed = 0;
+	self->bonfireID = bid;
 
 	self->frame = 28;
 

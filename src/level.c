@@ -96,7 +96,7 @@ Level *level_new(int worldNum)
 	if (worldNum == 4)
 	{
 		// 3 to 4
-		level->player = player_new("saves/player.json");
+		level->player = player_new("saves/player.json", level);
 		level->player->position.x = 600;
 		level->player->position.y = 550;
 
@@ -106,14 +106,14 @@ Level *level_new(int worldNum)
 		portal4t3 = portal_new(vector2d(600, 700), level, 3, 90);
 
 		Zentity *monster6;
-		monster6 = monster_new(vector2d(700, 500), 4);
+		monster6 = monster_new(vector2d(700, 500), 6);
 	}
 	else if (worldNum == 3) // 3 - Overworld 2
 	{
 		// 1 to 3
 		// 4 to 3
 
-		level->player = player_new("saves/player.json");
+		level->player = player_new("saves/player.json", level);
 		if (levelTag == 4)
 		{
 			level->player->position.x = 575;
@@ -147,7 +147,7 @@ Level *level_new(int worldNum)
 	else if (worldNum == 2) // 2 - Underworld
 	{
 		// 1 to 2
-		level->player = player_new("saves/player.json");
+		level->player = player_new("saves/player.json", level);
 		level->player->position.x = 600;
 		level->player->position.y = 550;
 
@@ -158,13 +158,13 @@ Level *level_new(int worldNum)
 		Zentity *monster5;
 		monster5 = monster_new(vector2d(600, 400), 5);
 		Zentity *bonfire;
-		bonfire = bonfire_new(vector2d(600, 300));
+		bonfire = bonfire_new(vector2d(600, 300), 2);
 	}
 	else if (worldNum == 1) // 1 - Default
 	{
 		// 2 to 1
 		// 3 to 1
-		level->player = player_new("saves/player.json");
+		level->player = player_new("saves/player.json", level);
 
 		if (levelTag == 3)
 		{
@@ -191,7 +191,7 @@ Level *level_new(int worldNum)
 
 		// Bonfires
 		Zentity *bonfire;
-		bonfire = bonfire_new(vector2d(400, 150));
+		bonfire = bonfire_new(vector2d(600, 300), 1);
 		
 		// Portals
 		Zentity *portal1t3;
