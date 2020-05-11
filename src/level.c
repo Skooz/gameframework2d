@@ -8,6 +8,7 @@
 #include "gf2d_elements.h"
 #include "gf2d_font.h"
 #include "gfc_input.h"
+#include "gfc_audio.h"
 #include "gf2d_element_button.h"
 #include "gf2d_element_label.h"
 #include "gf2d_element_actor.h"
@@ -165,7 +166,6 @@ Level *level_new(int worldNum)
 		// 2 to 1
 		// 3 to 1
 		level->player = player_new("saves/player.json", level);
-
 		if (levelTag == 3)
 		{
 			level->player->position.x = 600;

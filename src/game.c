@@ -10,6 +10,7 @@
 #include "gf2d_elements.h"
 #include "gf2d_font.h"
 #include "gfc_input.h"
+#include "gfc_audio.h"
 #include "gf2d_element_button.h"
 #include "gf2d_element_label.h"
 #include "gf2d_element_actor.h"
@@ -39,13 +40,15 @@ Level *level;
 
 // Windows
 Window* menu;
-
 Window *ui;
 Element* hplabel;
 Element* mplabel;
 Element* soulslabel;
 Element* attacklabel;
 TextLine str;
+
+// Sounds
+Sound *menuMusic;
 
 int main(int argc, char * argv[])
 {
@@ -83,6 +86,9 @@ int main(int argc, char * argv[])
 	gfc_input_init("config/input.cfg");
 	gf2d_action_list_init(10);
 	gf2d_windows_init(10);
+	gfc_audio_init(10, 10, 10, 10, true, true);
+	gfc_sound_init(10);
+	
 	
 	// Load Mouse
 	gf2d_mouse_load("actors/mouse.actor");
@@ -94,7 +100,9 @@ int main(int argc, char * argv[])
 	// Main Menu
 	menu = gf2d_window_new();
 	menu = gf2d_window_load("config/menu.json");
-	menu->nodraw = 0;
+	menu->nodraw = 0; 
+	menuMusic = gfc_sound_load("sounds/menu.wav", 1.0, -1);
+	gfc_sound_play(menuMusic, 5, 0.7, -1, -1);
 
 	// HUD
 	ui = gf2d_window_new();
@@ -167,6 +175,7 @@ int main(int argc, char * argv[])
     }
 	level_free(level);
 	Zentity_manager_close();
+	gfc_sound_close();
 
     slog("---==== END ====---");
     return 0;
@@ -180,6 +189,9 @@ void startGame()
 		level_free(level);
 		level = level_new(1);
 		ui->nodraw = 0;
+		gfc_sound_clear_all();
+		Sound *levelMusic = gfc_sound_load("sounds/firelink.wav", 0.25, -1);
+		gfc_sound_play(levelMusic, 5, 0.25, -1, -1);
 	}
 	menu->nodraw = 1;
 }
