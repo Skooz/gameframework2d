@@ -83,11 +83,11 @@ void monster_think(Zentity *self)
 			self->nextMove = SDL_GetTicks() + moveDistance;
 			if (self->moveDir == 1)
 			{
-				self->moveDir = 0;
+				self->moveDir = 2;
 				vector2d_set(self->velocity, 0, -1);
 				return;
 			}
-			if (self->moveDir == 0)
+			if (self->moveDir == 2)
 			{
 				self->moveDir = 1;
 				vector2d_set(self->velocity, 0, 1);
@@ -98,15 +98,15 @@ void monster_think(Zentity *self)
 		if (SDL_GetTicks() > self->nextMove) // Movement - Side to Side
 		{
 			self->nextMove = SDL_GetTicks() + moveDistance;
-			if (self->moveDir == 1)
+			if (self->moveDir == 4)
 			{
-				self->moveDir = 0;
+				self->moveDir = 3;
 				vector2d_set(self->velocity, -1, 0);
 				return;
 			}
-			if (self->moveDir == 0)
+			if (self->moveDir == 3)
 			{
-				self->moveDir = 1;
+				self->moveDir = 4;
 				vector2d_set(self->velocity, 1, 0);
 				return;
 			}
@@ -331,13 +331,38 @@ void monster_see(Zentity *self, Zentity *other)
 {
 	if (!self || !other) return;
 	
-	// Monsters that can have a target. Having a target does not mean they can track\move to player.
-	if (self->monsterType == 5 || self->monsterType == 6)
+	
+	if (other->isPlayer && !target && SDL_GetTicks() > self->birthday + 3000)
 	{
-		if (other->isPlayer && !target && SDL_GetTicks() > self->birthday + 3000)
+		if (self->monsterType == 5 || self->monsterType == 6)
 		{
+			// These have their own tracking behaviors.
 			//slog("I SEE YOU");
 			target = other;
+		}
+		if (self->monsterType == 1 || self->monsterType == 2)
+		{
+			if (SDL_GetTicks() > attackTime)
+			{
+				attackTime = SDL_GetTicks() + 1000;
+				Zentity *arrow;
+				if (self->moveDir == 1)
+				{
+					arrow = arrow_new(vector2d(self->position.x, self->position.y - 30), vector2d(0, -2), self->moveDir, self);
+				}
+				if (self->moveDir == 2)
+				{
+					arrow = arrow_new(vector2d(self->position.x, self->position.y + 30), vector2d(0, 2), self->moveDir, self);
+				}
+				if (self->moveDir == 3)
+				{
+					arrow = arrow_new(vector2d(self->position.x - 30, self->position.y), vector2d(-2, 0), self->moveDir, self);
+				}
+				if (self->moveDir == 4)
+				{
+					arrow = arrow_new(vector2d(self->position.x + 30, self->position.y), vector2d(2, 0), self->moveDir, self);
+				}
+			}
 		}
 	}
 }
@@ -424,7 +449,13 @@ Zentity *monster_new(Vector2D position, int type)
 	self->damage = 0;
 
 	self->nextMove = 0;
-	self->moveDir = 1;
+
+	if (self->monsterType == 2)
+	{
+		self->moveDir = 4;
+	}
+	else
+		self->moveDir = 1;
 
 	self->birthday = SDL_GetTicks();
 

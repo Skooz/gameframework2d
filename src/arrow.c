@@ -22,7 +22,7 @@ void arrow_think(Zentity *self)
 		self->souls = 0;
 	}
 	
-	if (self->state == ES_DEAD)
+	if (self->state == ES_DEAD || self->velocity.x == 0 && self->velocity.y == 0)
 		Zentity_free(self);
 
 	/*
@@ -43,9 +43,9 @@ void arrow_touch(Zentity *self, Zentity *other)
 		other->magic += 5;
 		self->state = ES_DEAD;
 	}
-	else if (other->isPlayer && owner->monsterType == 5)
+	else if (other->isPlayer && owner->monsterType == 5 || owner->monsterType == 1 || owner->monsterType == 2)
 	{
-		other->health -= 20;
+		other->health -= 10;
 		self->state = ES_DEAD;
 	}
 	else
@@ -53,8 +53,7 @@ void arrow_touch(Zentity *self, Zentity *other)
 		slog("Hit for %i damage", self->damage);
 		self->state = ES_DEAD;
 	}
-	
-	
+
 	vector2d_set(self->velocity, 0, 0);
 }
 
