@@ -131,66 +131,6 @@ void player_think(Zentity *self)
 	// Player's sight box
 	gfc_rect_set(self->rect, self->position.x-15, self->position.y-15, 30, 30);
 
-	// ** STATS ** 
-	if (keys[SDL_SCANCODE_F1] && nextMessage < SDL_GetTicks()) // Level Health
-	{
-		nextMessage = SDL_GetTicks() + 500;
-		if (self->souls >= 100)
-		{
-			self->maxHealth += 10;
-			self->souls -= 100;
-			slog("Health increased +10.\n-100 Souls.");
-		}
-		else
-			slog("Not enough souls.");
-	}
-	if (keys[SDL_SCANCODE_F2] && nextMessage < SDL_GetTicks()) // Level Magic
-	{
-		nextMessage = SDL_GetTicks() + 500;
-		if (self->souls >= 100)
-		{
-			self->maxMagic += 10;
-			self->souls -= 100;
-			slog("Magic increased +10.\n-100 Souls.");
-		}
-		else
-			slog("Not enough souls.");
-	}
-	if (keys[SDL_SCANCODE_F3] && nextMessage < SDL_GetTicks()) // Level Attack
-	{
-		nextMessage = SDL_GetTicks() + 500;
-		if (self->souls >= 100)
-		{
-			self->attack += 1;
-			self->souls -= 100;
-			slog("Attack increased +1.\n-100 Souls.");
-		}
-		else
-			slog("Not enough souls.");
-	}
-
-	// Printing
-	if (keys[SDL_SCANCODE_1] && nextMessage < SDL_GetTicks()) // Print Health
-	{
-		nextMessage = SDL_GetTicks() + 500;
-		slog("Health: %i / %i", self->health, self->maxHealth);
-	}
-	if (keys[SDL_SCANCODE_2] && nextMessage < SDL_GetTicks()) // Print Magic
-	{
-		nextMessage = SDL_GetTicks() + 500;
-		slog("Magic: %i / %i", self->magic, self->maxMagic);
-	}
-	if (keys[SDL_SCANCODE_3] && nextMessage < SDL_GetTicks()) // Print Attack
-	{
-		nextMessage = SDL_GetTicks() + 500;
-		slog("Attack: %i", self->attack);
-	}
-	if (keys[SDL_SCANCODE_4] && nextMessage < SDL_GetTicks()) // Print Souls
-	{
-		nextMessage = SDL_GetTicks() + 500;
-		slog("Souls: %i", self->souls);
-	}
-
 	// ** MOVEMENT **
 	if (keys[SDL_SCANCODE_W]) // Up
 	{
