@@ -2,6 +2,7 @@
 #define __PLAYER_H__
 
 #include "entity.h"
+#include "level.h"
 
 Zentity *player_new(char* saveFile);
 

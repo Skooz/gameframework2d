@@ -40,7 +40,7 @@ void monster_think(Zentity *self)
 		if (self->monsterType == 1) self->frame = 15;
 		if (self->monsterType == 2) self->frame = 19;
 		if (self->monsterType == 3) self->frame = 94;
-		if (self->monsterType == 4) self->frame = 90;
+		if (self->monsterType == 4 || self->monsterType == 6) self->frame = 90;
 		if (self->monsterType == 5) self->frame = 64;
 	}
 	if (self->velocity.x < 0 && self->velocity.y == 0)
@@ -50,7 +50,7 @@ void monster_think(Zentity *self)
 		if (self->monsterType == 1) self->frame = 16;
 		if (self->monsterType == 2) self->frame = 20;
 		if (self->monsterType == 3) self->frame = 95;
-		if (self->monsterType == 4) self->frame = 91;
+		if (self->monsterType == 4 || self->monsterType == 6) self->frame = 91;
 		if (self->monsterType == 5) self->frame = 65;
 	}
 	if (self->velocity.x == 0 && self->velocity.y < 0)
@@ -60,7 +60,7 @@ void monster_think(Zentity *self)
 		if (self->monsterType == 1) self->frame = 17;
 		if (self->monsterType == 2) self->frame = 21;
 		if (self->monsterType == 3) self->frame = 96;
-		if (self->monsterType == 4) self->frame = 92;
+		if (self->monsterType == 4 || self->monsterType == 6) self->frame = 92;
 		if (self->monsterType == 5) self->frame = 66;
 	}
 	if (self->velocity.x > 0 && self->velocity.y == 0)
@@ -70,7 +70,7 @@ void monster_think(Zentity *self)
 		if (self->monsterType == 1) self->frame = 18;
 		if (self->monsterType == 2) self->frame = 22;
 		if (self->monsterType == 3) self->frame = 97;
-		if (self->monsterType == 4) self->frame = 93;
+		if (self->monsterType == 4 || self->monsterType == 6) self->frame = 93;
 		if (self->monsterType == 5) self->frame = 67;
 	}
 
@@ -114,36 +114,36 @@ void monster_think(Zentity *self)
 	case 3:
 		if (SDL_GetTicks() > self->nextMove) // Rectangular Movement
 		{
-			self->nextMove = SDL_GetTicks() + moveDistance;
+			self->nextMove = SDL_GetTicks() + moveDistance + 500;
 			if (self->moveDir == 1)
 			{
 				self->moveDir = 2;
-				vector2d_set(self->velocity, -0.5, 0);
+				vector2d_set(self->velocity, -0.7, 0);
 				return;
 			}
 			if (self->moveDir == 2)
 			{
 				self->moveDir = 3;
-				vector2d_set(self->velocity, 0, -0.5);
+				vector2d_set(self->velocity, 0, -0.7);
 				return;
 			}
 			if (self->moveDir == 3)
 			{
 				self->moveDir = 4;
-				vector2d_set(self->velocity, 0.5, 0);
+				vector2d_set(self->velocity, 0.7, 0);
 				return;
 			}
 			if (self->moveDir == 4)
 			{
 				self->moveDir = 1;
-				vector2d_set(self->velocity, 0, 0.5);
+				vector2d_set(self->velocity, 0, 0.7);
 				return;
 			}
 		}
 	case 4:
 		if (SDL_GetTicks() > self->nextMove) // Stationary Movement - No velocity means we change directions here
 		{
-			self->nextMove = SDL_GetTicks() + moveDistance;
+			self->nextMove = SDL_GetTicks() + moveDistance + 500;
 			if (self->moveDir == 1)
 			{
 				self->moveDir = 2;
@@ -330,12 +330,16 @@ void monster_think(Zentity *self)
 void monster_see(Zentity *self, Zentity *other)
 {
 	if (!self || !other) return;
-	if (other->isPlayer && !target && self->monsterType == 5 || self->monsterType == 6 && SDL_GetTicks() > 2500)
+	
+	// Monsters that can have a target. Having a target does not mean they can track\move to player.
+	if (self->monsterType == 5 || self->monsterType == 6)
 	{
-		//slog("I SEE YOU");
-		target = other;
+		if (other->isPlayer && !target && SDL_GetTicks() > self->birthday + 3000)
+		{
+			//slog("I SEE YOU");
+			target = other;
+		}
 	}
-		
 }
 
 // If we touch something
@@ -421,6 +425,8 @@ Zentity *monster_new(Vector2D position, int type)
 
 	self->nextMove = 0;
 	self->moveDir = 1;
+
+	self->birthday = SDL_GetTicks();
 
 	return self;
 }

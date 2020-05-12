@@ -107,7 +107,7 @@ Level *level_new(int worldNum)
 		portal4t3 = portal_new(vector2d(600, 700), level, 3, 90);
 
 		Zentity *monster6;
-		monster6 = monster_new(vector2d(700, 500), 6);
+		monster6 = monster_new(vector2d(600, 200), 6);
 	}
 	else if (worldNum == 3) // 3 - Overworld 2
 	{
@@ -133,17 +133,17 @@ Level *level_new(int worldNum)
 		Zentity *portal3t4;
 		portal3t4 = portal_new(vector2d(575, 50), level, 4, 60);
 
-		/*
+		
 		Zentity *fountain1;
-		fountain1 = fountain_new(vector2d(900, 550), 1);
+		fountain1 = fountain_new(vector2d(900, 360), 1);
 		Zentity *fountain2;
-		fountain2 = fountain_new(vector2d(1000, 550), 2);
-		*/
+		fountain2 = fountain_new(vector2d(300, 360), 2);
+		
 
 		Zentity *monster3;
-		monster3 = monster_new(vector2d(600, 475), 3); // Rectangular
+		monster3 = monster_new(vector2d(960, 420), 3); // Rectangular - Blue
 		Zentity *monster4;
-		monster4 = monster_new(vector2d(700, 500), 4); // Stationary
+		monster4 = monster_new(vector2d(240, 300), 4); // Rectangular - Red
 	}
 	else if (worldNum == 2) // 2 - Underworld
 	{
@@ -191,7 +191,7 @@ Level *level_new(int worldNum)
 
 		// Bonfires
 		Zentity *bonfire;
-		bonfire = bonfire_new(vector2d(600, 300), 1);
+		bonfire = bonfire_new(vector2d(300, 200), 1);
 		
 		// Portals
 		Zentity *portal1t3;

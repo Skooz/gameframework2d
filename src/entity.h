@@ -19,6 +19,9 @@ typedef struct Zentity_S
 
 	SDL_Rect rect; // Rectangle to draw
 
+	// Generic
+	Uint32 birthday;
+
 	// Monsters
 	Uint32 nextMove;
 	int moveDir;

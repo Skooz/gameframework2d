@@ -3,7 +3,7 @@
 
 #include "entity.h"
 
-Zentity *bonfire_new(Vector2D position);
+Zentity *bonfire_new(Vector2D position, int bfid);
 
 
 #endif
