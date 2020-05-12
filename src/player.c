@@ -168,6 +168,8 @@ void player_think(Zentity *self)
 		else
 			slog("Not enough souls.");
 	}
+
+	// Printing
 	if (keys[SDL_SCANCODE_1] && nextMessage < SDL_GetTicks()) // Print Health
 	{
 		nextMessage = SDL_GetTicks() + 500;

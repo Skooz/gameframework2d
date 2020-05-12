@@ -28,8 +28,12 @@
 #include "fountain.h"
 #include "portal.h"
 
+// Functions
 void startGame();
 void exitGame();
+void levelHealth();
+void levelMagic();
+void levelAttack();
 
 // Vars
 int done;
@@ -41,6 +45,7 @@ Level *level;
 // Windows
 Window* menu;
 Window *ui;
+Window *stats;
 Element* hplabel;
 Element* mplabel;
 Element* soulslabel;
@@ -57,11 +62,8 @@ int main(int argc, char * argv[])
 	menuTimer = 0;
 	int levelchange = 0;
     const Uint8 * keys;
-
 	char windowTitle[30];
-    
 	int mx,my;
-    float mf = 0;
 
     /*program initializtion*/
     init_logger("gf2d.log");
@@ -79,30 +81,26 @@ int main(int argc, char * argv[])
     SDL_ShowCursor(SDL_DISABLE);
 
     /*demo setup*/
-
-	// Initialize
+	// Initialize Systems
 	Zentity_manager_init(100);
 	gf2d_font_init("config/font.cfg");
 	gfc_input_init("config/input.cfg");
 	gf2d_action_list_init(10);
 	gf2d_windows_init(10);
-	gfc_audio_init(10, 10, 10, 10, true, true);
+	gfc_audio_init(10, 10, 10, 10, false, false);
 	gfc_sound_init(10);
-	
 	
 	// Load Mouse
 	gf2d_mouse_load("actors/mouse.actor");
 
-	// Create Player & Level
+	// Load Initial Level (Menu Level)
 	level = level_new(0);
-	//player = player_new("saves/player.json");
 	
+	// WINDOWS
 	// Main Menu
 	menu = gf2d_window_new();
 	menu = gf2d_window_load("config/menu.json");
 	menu->nodraw = 0; 
-	menuMusic = gfc_sound_load("sounds/menu.wav", 1.0, -1);
-	gfc_sound_play(menuMusic, 5, 0.7, -1, -1);
 
 	// HUD
 	ui = gf2d_window_new();
@@ -113,22 +111,32 @@ int main(int argc, char * argv[])
 	attacklabel = gf2d_window_get_element_by_id(ui, 2);
 	soulslabel = gf2d_window_get_element_by_id(ui, 3);
 
+	// Stat Menu
+	stats = gf2d_window_new();
+	stats = gf2d_window_load("config/statmenu.json");
+	stats->nodraw = 1;
+
 	// Map Hotkeys to Functions
 	gfc_input_set_callbacks("startGame", startGame, NULL, NULL, NULL, NULL);
 	gfc_input_set_callbacks("exitGame", exitGame, NULL, NULL, NULL, NULL);
+	gfc_input_set_callbacks("levelHealth", levelHealth, NULL, NULL, NULL, NULL);
+	gfc_input_set_callbacks("levelMagic", levelMagic, NULL, NULL, NULL, NULL);
+	gfc_input_set_callbacks("levelAttack", levelAttack, NULL, NULL, NULL, NULL);
+
+	// Menu Music
+	menuMusic = gfc_sound_load("sounds/menu.wav", 0.1, -1);
+	gfc_sound_play(menuMusic, 5, 0.1, -1, -1);
 
 	/*main game loop*/
     while(!done)
     {
         SDL_PumpEvents();   // update SDL's internal event structures
 		gfc_input_update();
-
-        keys = SDL_GetKeyboardState(NULL); // get the keyboard state for this frame
+		keys = SDL_GetKeyboardState(NULL); // get the keyboard state for this frame
+		SDL_GetMouseState(&mx, &my);
+		 
 		/*update things here*/
-        SDL_GetMouseState(&mx,&my);
-        mf+=0.1;
-        if (mf >= 16.0)mf = 0;
-
+		
 		// Update HUD
 		if (ui->nodraw == 0 && level->player)
 		{
@@ -136,7 +144,7 @@ int main(int argc, char * argv[])
 			gf2d_element_label_set_text(hplabel, str);
 			sprintf(str, "MP: %i / %i", level->player->magic, level->player->maxMagic);	// Player Magic UI
 			gf2d_element_label_set_text(mplabel, str);
-			sprintf(str, "Attack: %i", level->player->attack);						// Player Attack UI
+			sprintf(str, "ATK: %i", level->player->attack);						// Player Attack UI
 			gf2d_element_label_set_text(attacklabel, str);
 			sprintf(str, "Souls: %i", level->player->souls);						// Player Souls UI
 			gf2d_element_label_set_text(soulslabel, str);
@@ -156,17 +164,35 @@ int main(int argc, char * argv[])
 			gf2d_mouse_draw();
         gf2d_grahics_next_frame();// render current draw frame and skip to the next frame
 
-		// exit condition(s)
-		if (keys[SDL_SCANCODE_ESCAPE] && menuTimer < SDL_GetTicks() && menu->nodraw == 1)
+		// STAT MENU
+		if (keys[SDL_SCANCODE_I] && menuTimer < SDL_GetTicks())
 		{
-			menu->nodraw = 0;
-			menuTimer = SDL_GetTicks() + 400;
+			if (stats->nodraw == 1)
+			{
+				stats->nodraw = 0;
+				menuTimer = SDL_GetTicks() + 300;
+			}
+			else if (stats->nodraw == 0)
+			{
+				stats->nodraw = 1;
+				menuTimer = SDL_GetTicks() + 300;
+			}
 		}
-		else if (keys[SDL_SCANCODE_ESCAPE] && menuTimer < SDL_GetTicks() && menu->nodraw == 0)
+
+		// ESC MENU
+		if (keys[SDL_SCANCODE_ESCAPE] && menuTimer < SDL_GetTicks())
 		{
-			menu->nodraw = 1;
-			menuTimer = SDL_GetTicks() + 400;
-		}	
+			if (menu->nodraw == 1)
+			{
+				menu->nodraw = 0;
+				menuTimer = SDL_GetTicks() + 300;
+			}
+			else if (menu->nodraw == 0)
+			{
+				menu->nodraw = 1;
+				menuTimer = SDL_GetTicks() + 300;
+			}
+		}
 		
 		//slog("Rendering at %f FPS",gf2d_graphics_get_frames_per_second());
 
@@ -189,9 +215,10 @@ void startGame()
 		level_free(level);
 		level = level_new(1);
 		ui->nodraw = 0;
+		// Start music
 		gfc_sound_clear_all();
-		Sound *levelMusic = gfc_sound_load("sounds/firelink.wav", 0.25, -1);
-		gfc_sound_play(levelMusic, 5, 0.25, -1, -1);
+		Sound *levelMusic = gfc_sound_load("sounds/firelink.wav", 0.1, -1);
+		gfc_sound_play(levelMusic, 100, 0.1, -1, -1);
 	}
 	menu->nodraw = 1;
 }
@@ -200,6 +227,46 @@ void exitGame()
 {
 	slog("done?");
 	done = 1;
+}
+
+
+void levelHealth()
+{
+	if (!level->player) return;
+	if (level->player->souls >= 100)
+	{
+		level->player->maxHealth += 10;
+		level->player->souls -= 100;
+		slog("Health increased +10.\n-100 Souls.");
+	}
+	else
+		slog("Not enough souls.");
+}
+
+void levelMagic()
+{
+	if (!level->player) return;
+	if (level->player->souls >= 100)
+	{
+		level->player->maxMagic += 10;
+		level->player->souls -= 100;
+		slog("Magic increased +10.\n-100 Souls.");
+	}
+	else
+		slog("Not enough souls.");
+}
+
+void levelAttack()
+{
+	if (!level->player) return;
+	if (level->player->souls >= 100)
+	{
+		level->player->attack += 1;
+		level->player->souls -= 100;
+		slog("Attack increased +10.\n-100 Souls.");
+	}
+	else
+		slog("Not enough souls.");
 }
 
 /*eol@eof*/

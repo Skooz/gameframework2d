@@ -244,13 +244,13 @@ void monster_think(Zentity *self)
 			{
 				self->position.y += 1;
 				gfc_rect_set(self->rect, self->position.x, self->position.y, 1, 200);
-				self->frame = 92;
+				self->frame = 90;
 			}
 			if (ty < my) // go down
 			{
 				self->position.y -= 1;
 				gfc_rect_set(self->rect, self->position.x, self->position.y - 200, 1, 200);
-				self->frame = 90;
+				self->frame = 92;
 			}
 			if (tx < mx) // go left
 			{
