@@ -45,6 +45,8 @@ Zentity *bloodstain_new(Vector2D position, int droppedSouls)
 	vector2d_copy(self->position, position);
 	vector2d_set(self->drawOffset, -30, -30);
 
+
+	self->isBloodstain = 1;
 	self->souls = droppedSouls;
 
 	self->frame = 30;

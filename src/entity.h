@@ -41,6 +41,9 @@ typedef struct Zentity_S
 	int bonfireUsed;
 	int bonfireID;
 
+	// Bloodstains
+	int isBloodstain;
+
 	// Fountains
 	int fountainType;
 	

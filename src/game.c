@@ -106,6 +106,7 @@ int main(int argc, char * argv[])
 	ui = gf2d_window_new();
 	ui = gf2d_window_load("config/ui.json");
 	ui->nodraw = 1;
+	// define labels so we can update hud
 	hplabel = gf2d_window_get_element_by_id(ui, 0);
 	mplabel = gf2d_window_get_element_by_id(ui, 1);
 	attacklabel = gf2d_window_get_element_by_id(ui, 2);
@@ -116,7 +117,7 @@ int main(int argc, char * argv[])
 	stats = gf2d_window_load("config/statmenu.json");
 	stats->nodraw = 1;
 
-	// Map Hotkeys to Functions
+	// Map Hotkeys to Functions - Hotkeys are defined in input.cfg
 	gfc_input_set_callbacks("startGame", startGame, NULL, NULL, NULL, NULL);
 	gfc_input_set_callbacks("exitGame", exitGame, NULL, NULL, NULL, NULL);
 	gfc_input_set_callbacks("levelHealth", levelHealth, NULL, NULL, NULL, NULL);

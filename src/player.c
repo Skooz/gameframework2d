@@ -19,7 +19,7 @@ void player_see(Zentity *self, Zentity *other);
 Uint32 nextAttack; // Used with SDL_GetTicks() to create a delay between attacks.
 Uint32 nextMessage;
 Zentity* lastBonfire;
-static int lastBonfireLevel;
+static int bfid;
 Zentity* playerBloodstain;
 
 Level *level;
@@ -328,12 +328,10 @@ void player_think(Zentity *self)
 
 		if (lastBonfire)
 		{
-			/*
-			int bfid = lastBonfire->bonfireID;
 			slog("bfid: %i", bfid);
-			//level_free(level); 
-			//Zentity_free_all();
-			level = level_new(bfid);*/
+			level_free(level); 
+			Zentity_free_all();
+			level = level_new(bfid);
 			self->position = lastBonfire->position;
 		}
 		else
@@ -362,6 +360,7 @@ void player_touch(Zentity *self, Zentity *other)
 			lastBonfire->bonfireUsed = 0;
 		}
 		lastBonfire = other;
+        bfid = lastBonfire->bonfireID;
 	}
 
 }

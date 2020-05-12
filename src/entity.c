@@ -82,6 +82,7 @@ void Zentity_free_all()
 	int i;
 	for (i = 0; i < Zentity_manager.maxEnts; i++)
 	{
+		if (Zentity_manager.ZentityList[i].isBloodstain) continue;
 		if (Zentity_manager.ZentityList[i]._inuse)
 		{
 			Zentity_free(&Zentity_manager.ZentityList[i]);
