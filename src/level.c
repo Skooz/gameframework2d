@@ -107,7 +107,7 @@ Level *level_new(int worldNum)
 		portal4t3 = portal_new(vector2d(600, 700), level, 3, 90);
 
 		Zentity *monster6;
-		monster6 = monster_new(vector2d(600, 200), 6);
+		monster6 = monster_new(vector2d(600, 200), 6, 1300);
 	}
 	else if (worldNum == 3) // 3 - Overworld 2
 	{
@@ -141,9 +141,18 @@ Level *level_new(int worldNum)
 		
 
 		Zentity *monster3;
-		monster3 = monster_new(vector2d(960, 420), 3); // Rectangular - Blue
+		monster3 = monster_new(vector2d(960, 420), 3, 1300); // Rectangular - Blue
 		Zentity *monster4;
-		monster4 = monster_new(vector2d(240, 300), 4); // Rectangular - Red
+		monster4 = monster_new(vector2d(240, 300), 4, 1300); // Rectangular - Red
+
+		Zentity *monster2;
+		monster2 = monster_new(vector2d(525, 200), 2, 900); // Side-Side
+		Zentity *monster5;
+		monster5 = monster_new(vector2d(785, 500), 2, 1200); // Side-Side
+		Zentity *monster1;
+		monster1 = monster_new(vector2d(425, 350), 1, 1100); // Up-Down
+		Zentity *monster6;
+		monster6 = monster_new(vector2d(700, 325), 1, 1000); // Up-Down
 	}
 	else if (worldNum == 2) // 2 - Underworld
 	{
@@ -157,7 +166,7 @@ Level *level_new(int worldNum)
 		Zentity *portal2t1;
 		portal2t1 = portal_new(vector2d(600, 700), level, 1, 90);
 		Zentity *monster5;
-		monster5 = monster_new(vector2d(600, 400), 5);
+		monster5 = monster_new(vector2d(600, 400), 5, 1300);
 		Zentity *bonfire;
 		bonfire = bonfire_new(vector2d(600, 300), 2);
 	}
@@ -181,13 +190,13 @@ Level *level_new(int worldNum)
 
 		// Monsters
 		Zentity *monster1;
-		monster1 = monster_new(vector2d(400, 550), 1); // Up-Down
+		monster1 = monster_new(vector2d(400, 450), 1, 1300); // Up-Down
 		Zentity *monster2;
-		monster2 = monster_new(vector2d(500, 300), 2); // Side-Side
+		monster2 = monster_new(vector2d(500, 300), 2, 1300); // Side-Side
 		Zentity *monster3;
-		monster3 = monster_new(vector2d(600, 500), 2); // Up-Down
+		monster3 = monster_new(vector2d(600, 500), 2, 1300); // Side-Side
 		Zentity *monster4;
-		monster4 = monster_new(vector2d(700, 525), 1); // Side-Side
+		monster4 = monster_new(vector2d(700, 425), 1, 1300); // Up-Down
 
 		// Bonfires
 		Zentity *bonfire;

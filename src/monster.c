@@ -6,7 +6,6 @@
 
 #define ES_DEAD 1
 
-Uint32 moveDistance = 1300;
 Zentity *target;
 int bashTime;
 Uint32 attackTime;
@@ -80,16 +79,16 @@ void monster_think(Zentity *self)
 	case 1:
 		if (SDL_GetTicks() > self->nextMove) // Movement - Up and Down
 		{
-			self->nextMove = SDL_GetTicks() + moveDistance;
-			if (self->moveDir == 1)
-			{
-				self->moveDir = 2;
-				vector2d_set(self->velocity, 0, -1);
-				return;
-			}
+			self->nextMove = SDL_GetTicks() + self->moveDistance;
 			if (self->moveDir == 2)
 			{
 				self->moveDir = 1;
+				vector2d_set(self->velocity, 0, -1);
+				return;
+			}
+			if (self->moveDir == 1)
+			{
+				self->moveDir = 2;
 				vector2d_set(self->velocity, 0, 1);
 				return;
 			}
@@ -97,7 +96,7 @@ void monster_think(Zentity *self)
 	case 2: 
 		if (SDL_GetTicks() > self->nextMove) // Movement - Side to Side
 		{
-			self->nextMove = SDL_GetTicks() + moveDistance;
+			self->nextMove = SDL_GetTicks() + self->moveDistance;
 			if (self->moveDir == 4)
 			{
 				self->moveDir = 3;
@@ -114,7 +113,7 @@ void monster_think(Zentity *self)
 	case 3:
 		if (SDL_GetTicks() > self->nextMove) // Rectangular Movement
 		{
-			self->nextMove = SDL_GetTicks() + moveDistance + 500;
+			self->nextMove = SDL_GetTicks() + self->moveDistance + 500;
 			if (self->moveDir == 1)
 			{
 				self->moveDir = 2;
@@ -143,7 +142,7 @@ void monster_think(Zentity *self)
 	case 4:
 		if (SDL_GetTicks() > self->nextMove) // Stationary Movement - No velocity means we change directions here
 		{
-			self->nextMove = SDL_GetTicks() + moveDistance + 500;
+			self->nextMove = SDL_GetTicks() + self->moveDistance + 500;
 			if (self->moveDir == 1)
 			{
 				self->moveDir = 2;
@@ -207,7 +206,7 @@ void monster_think(Zentity *self)
 		}
 		else if (SDL_GetTicks() > self->nextMove && !target) // Patrol
 		{
-			self->nextMove = SDL_GetTicks() + moveDistance;
+			self->nextMove = SDL_GetTicks() + self->moveDistance;
 			if (self->moveDir == 1)
 			{
 				self->moveDir = 2;
@@ -267,7 +266,7 @@ void monster_think(Zentity *self)
 		}
 		else if (SDL_GetTicks() > self->nextMove && !target) // Patrol
 		{
-			self->nextMove = SDL_GetTicks() + moveDistance;
+			self->nextMove = SDL_GetTicks() + self->moveDistance;
 			if (self->moveDir == 1)
 			{
 				self->moveDir = 2;
@@ -302,11 +301,11 @@ void monster_think(Zentity *self)
 		Zentity *arrow;
 		if (self->moveDir == 2)
 		{
-			arrow = arrow_new(vector2d(self->position.x, self->position.y - 30), vector2d(0, -5), self->moveDir, self);
+			arrow = arrow_new(vector2d(self->position.x, self->position.y - 30), vector2d(0, -5), 1, self);
 		}
 		if (self->moveDir == 1)
 		{
-			arrow = arrow_new(vector2d(self->position.x, self->position.y + 30), vector2d(0, 5), self->moveDir, self);
+			arrow = arrow_new(vector2d(self->position.x, self->position.y + 30), vector2d(0, 5), 2, self);
 		}
 		if (self->moveDir == 3)
 		{
@@ -332,7 +331,7 @@ void monster_see(Zentity *self, Zentity *other)
 	if (!self || !other) return;
 	
 	
-	if (other->isPlayer && SDL_GetTicks() > self->birthday + 3000)
+	if (other->isPlayer && SDL_GetTicks() > self->birthday + 1500)
 	{
 		if (!target && self->monsterType == 5 || self->monsterType == 6)
 		{
@@ -395,7 +394,7 @@ void monster_touch(Zentity *self, Zentity *other)
 
 
 // Create a new monster
-Zentity *monster_new(Vector2D position, int type)
+Zentity *monster_new(Vector2D position, int type, Uint32 mD)
 {
 	Zentity *self;
 	self = Zentity_new();
@@ -444,11 +443,14 @@ Zentity *monster_new(Vector2D position, int type)
 
 	self->maxMagic = 0;
 	self->magic = self->maxMagic;
-
 	self->attack = 0;
 	self->damage = 0;
-
 	self->nextMove = 0;
+	
+	if (mD)
+		self->moveDistance = mD;
+	else 
+		self->moveDistance = 1300;
 
 	if (self->monsterType == 2)
 	{
