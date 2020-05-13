@@ -160,8 +160,8 @@ void Zentity_draw(Zentity *self)
 		(Uint32)self->frame);
 
 	//Hitbox
-	gf2d_draw_circle(self->position, self->radius, vector4d(255, 0, 255, 255));
-	gf2d_draw_rect(self->rect, vector4d(0, 255, 255, 255));
+	gf2d_draw_circle(self->position, self->radius, vector4d(255, 0, 255, 0));
+	gf2d_draw_rect(self->rect, vector4d(0, 255, 255, 0));
 	
 }
 

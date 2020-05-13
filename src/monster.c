@@ -332,9 +332,9 @@ void monster_see(Zentity *self, Zentity *other)
 	if (!self || !other) return;
 	
 	
-	if (other->isPlayer && !target && SDL_GetTicks() > self->birthday + 3000)
+	if (other->isPlayer && SDL_GetTicks() > self->birthday + 3000)
 	{
-		if (self->monsterType == 5 || self->monsterType == 6)
+		if (!target && self->monsterType == 5 || self->monsterType == 6)
 		{
 			// These have their own tracking behaviors.
 			//slog("I SEE YOU");

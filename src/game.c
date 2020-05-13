@@ -138,19 +138,6 @@ int main(int argc, char * argv[])
 		 
 		/*update things here*/
 		
-		// Update HUD
-		if (ui->nodraw == 0 && level->player)
-		{
-			sprintf(str, "HP: %i / %i", level->player->health, level->player->maxHealth); // Player Health UI
-			gf2d_element_label_set_text(hplabel, str);
-			sprintf(str, "MP: %i / %i", level->player->magic, level->player->maxMagic);	// Player Magic UI
-			gf2d_element_label_set_text(mplabel, str);
-			sprintf(str, "ATK: %i", level->player->attack);						// Player Attack UI
-			gf2d_element_label_set_text(attacklabel, str);
-			sprintf(str, "Souls: %i", level->player->souls);						// Player Souls UI
-			gf2d_element_label_set_text(soulslabel, str);
-		}
-		
 		gf2d_mouse_update();
 		gf2d_windows_update_all();
 		Zentity_update_all();
@@ -164,6 +151,20 @@ int main(int argc, char * argv[])
 			gf2d_windows_draw_all();
 			gf2d_mouse_draw();
         gf2d_grahics_next_frame();// render current draw frame and skip to the next frame
+
+		// Update HUD
+		if (ui->nodraw == 0 && level->player)
+		{
+			sprintf(str, "HP: %i / %i", level->player->health, level->player->maxHealth); // Player Health UI
+			gf2d_element_label_set_text(hplabel, str);
+			sprintf(str, "MP: %i / %i", level->player->magic, level->player->maxMagic);	// Player Magic UI
+			gf2d_element_label_set_text(mplabel, str);
+			sprintf(str, "ATK: %i", level->player->attack);						// Player Attack UI
+			gf2d_element_label_set_text(attacklabel, str);
+			sprintf(str, "Souls: %i", level->player->souls);						// Player Souls UI
+			gf2d_element_label_set_text(soulslabel, str);
+		}
+
 
 		// STAT MENU
 		if (keys[SDL_SCANCODE_I] && menuTimer < SDL_GetTicks())
@@ -195,8 +196,6 @@ int main(int argc, char * argv[])
 			}
 		}
 		
-		//slog("Rendering at %f FPS",gf2d_graphics_get_frames_per_second());
-
 		if (level->player)
 			player_save(level->player, "saves/player.json");
     }
